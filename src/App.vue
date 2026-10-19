@@ -1,7 +1,15 @@
 <script setup lang="ts">
-import Dashboard from "./components/Dashboard.vue";
+import { RouterView } from "vue-router";
+import { onMounted } from "vue";
+import { useAuthStore } from "@/stores/auth";
+
+const authStore = useAuthStore();
+
+onMounted(async () => {
+  await authStore.fetchUser();
+});
 </script>
 
 <template>
-  <Dashboard />
+  <RouterView></RouterView>
 </template>

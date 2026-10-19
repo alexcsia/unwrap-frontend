@@ -3,7 +3,8 @@ import { createRouter, createWebHistory } from "vue-router";
 import LoginPage from "@/pages/LoginPage.vue";
 import RegisterPage from "@/pages/RegisterPage.vue";
 import DashboardPage from "@/pages/DashboardPage.vue";
-import { getProfile } from "@/services/api";
+// import { getProfile } from "@/services/api";
+import { useAuthStore } from "@/stores/auth";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -30,23 +31,18 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to) => {
-  let authenticated = false;
+  const authStore = useAuthStore();
 
-  try {
-    await getProfile();
-    authenticated = true;
-  } catch {
-    authenticated = false;
+  if (!authStore.isInitialized) {
+    await authStore.fetchUser();
   }
-
-  if (to.meta.requiresAuth && !authenticated) {
+  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     return { name: "login", query: { redirect: to.fullPath } };
   }
 
-  if (to.meta.guestOnly && authenticated) {
+  if (to.meta.guestOnly && authStore.isAuthenticated) {
     return { name: "dashboard" };
   }
-
   return true;
 });
 

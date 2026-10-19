@@ -27,7 +27,6 @@ const submitLogin = async () => {
     const redirect =
       typeof route.query.redirect === "string" ? route.query.redirect : "/";
 
-    // Avoid redirecting to an external URL.
     const safeRedirect =
       redirect.startsWith("/") && !redirect.startsWith("//") ? redirect : "/";
 
