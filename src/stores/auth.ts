@@ -10,11 +10,10 @@ import {
 
 export const useAuthStore = defineStore("auth", () => {
   const user = ref<UserProfile | null>(null);
-  const isInitialized = ref(false); // Prevents duplicate initial fetches
+  const isInitialized = ref(false);
 
   const isAuthenticated = computed(() => !!user.value);
 
-  // Fetch profile once (cached for the session)
   async function fetchUser() {
     if (isInitialized.value) return;
     try {
@@ -45,8 +44,12 @@ export const useAuthStore = defineStore("auth", () => {
   }
 
   async function logout() {
-    await apiLogout();
-    clearUser();
+    try {
+      await apiLogout();
+    } finally {
+      clearUser();
+      window.location.href = "/login";
+    }
   }
 
   return {
