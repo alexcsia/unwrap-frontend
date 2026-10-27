@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const API_URL = import.meta.env.VITE_API_URL;
 
 export class ApiError extends Error {
@@ -20,59 +22,41 @@ export interface AuthResponse {
   user: UserProfile;
 }
 
-async function apiRequest<T>(
-  path: string,
-  options: RequestInit = {},
-): Promise<T> {
-  const response = await fetch(`${API_URL}${path}`, {
-    ...options,
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-      ...options.headers,
-    },
-  });
+export const api = axios.create({
+  baseURL: API_URL,
+  withCredentials: true,
+});
 
-  if (!response.ok) {
-    let message = `Request failed (${response.status})`;
+api.interceptors.response.use(
+  (res) => res,
+  async (error) => {
+    const original = error.config;
 
-    try {
-      const body = await response.json();
-      message = body.message ?? message;
-    } catch {
-      console.log(message);
+    if (
+      error.response?.status === 401 &&
+      !original._retry &&
+      !original.url.includes("/auth/")
+    ) {
+      original._retry = true;
+      await api.post("/auth/refresh");
+      return api(original);
     }
 
-    throw new ApiError(response.status, message);
-  }
-
-  if (response.status === 204) {
-    return undefined as T;
-  }
-
-  return response.json() as Promise<T>;
-}
+    return Promise.reject(error);
+  },
+);
 
 export const login = (email: string, password: string) =>
-  apiRequest<AuthResponse>("/auth/login", {
-    method: "POST",
-    body: JSON.stringify({ email, password }),
-  });
+  api
+    .post<AuthResponse>("/auth/login", { email, password })
+    .then((r) => r.data);
 
 export const register = (name: string, email: string, password: string) =>
-  apiRequest<AuthResponse>("/auth/register", {
-    method: "POST",
-    body: JSON.stringify({ name, email, password }),
-  });
+  api
+    .post<AuthResponse>("/auth/register", { name, email, password })
+    .then((r) => r.data);
 
-export const logout = () =>
-  apiRequest<void>("/auth/logout", {
-    method: "POST",
-  });
+export const logout = () => api.post<void>("/auth/logout").then((r) => r.data);
 
-export const getProfile = () => apiRequest<UserProfile>("/user/profile");
-
-export const linkPlatform = (platform: string) =>
-  apiRequest<{ redirectUrl: string }>(
-    `/auth/connect/${encodeURIComponent(platform)}`,
-  );
+export const getProfile = () =>
+  api.get<UserProfile>("/user/profile").then((r) => r.data);
