@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import StatCard from "@/components/statistics/StatCard.vue";
+import RankedTable, {
+  type RankedColumn,
+} from "@/components/statistics/RankedTable.vue";
 import { getTopArtists, getTopTracks, getTimeListened } from "@/services/api";
 import type {
+  StatsParams,
   TopArtist,
   TopTrack,
   TimeListenedResponse,
-  StatsParams,
 } from "@/services/types/statistics";
 import { VueDatePicker } from "@vuepic/vue-datepicker";
 
@@ -58,6 +61,17 @@ async function loadArtists() {
   }
 }
 
+const artistColumns: RankedColumn[] = [
+  { key: "rank", label: "#" },
+  { key: "artistName", label: "Artist" },
+  { key: "plays", label: "Plays" },
+  {
+    key: "durationMs",
+    label: "Time",
+    format: (r: TopArtist) => formatDuration(r.durationMs),
+  },
+];
+
 const tracks = ref<TopTrack[]>([]);
 const tracksLoading = ref(false);
 const tracksError = ref<string | null>(null);
@@ -75,6 +89,19 @@ async function loadTracks() {
     tracksLoading.value = false;
   }
 }
+
+const trackColumns: RankedColumn[] = [
+  { key: "rank", label: "#" },
+  { key: "trackName", label: "Track" },
+  { key: "artistNames", label: "Artist" },
+  { key: "albumName", label: "Album" },
+  { key: "plays", label: "Plays" },
+  {
+    key: "durationMs",
+    label: "Duration",
+    format: (r: TopTrack) => formatDuration(r.durationMs),
+  },
+];
 
 const time = ref<TimeListenedResponse | null>(null);
 const timeLoading = ref(false);
@@ -111,9 +138,7 @@ function loadAll() {
         placeholder="Select date range"
       />
       <div>
-        <h1 class="text-2xl font-bold m-0 text-[#191919]">
-          Explore your listening stats
-        </h1>
+        <h1 class="text-2xl font-bold m-0 text-[#191919]">Listening stats</h1>
       </div>
 
       <button
@@ -161,5 +186,45 @@ function loadAll() {
         />
       </div>
     </section>
+
+    <RankedTable
+      title="Top artists"
+      :columns="artistColumns"
+      :rows="artists"
+      :loading="artistsLoading"
+      :error="artistsError"
+      empty-message="Load top artists to see results."
+    >
+      <template #actions>
+        <button
+          type="button"
+          class="px-3.5 py-2 border border-neutral-700 rounded-lg bg-[#191919] text-white cursor-pointer hover:bg-[#303030] disabled:opacity-50 disabled:cursor-default"
+          :disabled="artistsLoading"
+          @click="loadArtists"
+        >
+          {{ artistsLoading ? "Loading…" : "Load" }}
+        </button>
+      </template>
+    </RankedTable>
+
+    <RankedTable
+      title="Top tracks"
+      :columns="trackColumns"
+      :rows="tracks"
+      :loading="tracksLoading"
+      :error="tracksError"
+      empty-message="Load top tracks to see results."
+    >
+      <template #actions>
+        <button
+          type="button"
+          class="px-3.5 py-2 border border-neutral-700 rounded-lg bg-[#191919] text-white cursor-pointer hover:bg-[#303030] disabled:opacity-50 disabled:cursor-default"
+          :disabled="tracksLoading"
+          @click="loadTracks"
+        >
+          {{ tracksLoading ? "Loading…" : "Load" }}
+        </button>
+      </template>
+    </RankedTable>
   </main>
 </template>
