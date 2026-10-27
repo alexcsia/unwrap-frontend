@@ -49,24 +49,33 @@ const submitRegister = async () => {
 </script>
 
 <template>
-  <main class="auth-page">
-    <section class="auth-card">
-      <RouterLink to="/" class="brand">Unwrap</RouterLink>
+  <main
+    class="min-h-screen grid place-items-center p-4 bg-[#f5f5f5] text-[#f5f5f5]"
+  >
+    <section
+      class="w-full max-w-[420px] box-border p-5 border border-[#303030] rounded-[18px] bg-[#191919]"
+    >
+      <RouterLink
+        to="/"
+        class="text-[#a8e66b] text-2xl font-extrabold no-underline"
+        >Unwrap</RouterLink
+      >
 
-      <h1>Create your account</h1>
-      <p class="auth-subtitle">Start understanding your music.</p>
+      <h1 class="mt-7 mb-2 font-bold text-2xl">Create your account</h1>
+      <p class="text-[#aaa] leading-[1.6]">Start understanding your music.</p>
 
-      <form @submit.prevent="submitRegister">
-        <label for="name">Name</label>
+      <form @submit.prevent="submitRegister" class="grid gap-3 mt-7">
+        <label for="name" class="text-sm">Name</label>
         <input
           id="name"
           v-model.trim="name"
           autocomplete="name"
           placeholder="Your name"
           required
+          class="box-border w-full p-[13px] border border-[#444] rounded-lg bg-[#101010] text-white"
         />
 
-        <label for="email">Email</label>
+        <label for="email" class="text-sm">Email</label>
         <input
           id="email"
           v-model.trim="email"
@@ -74,9 +83,10 @@ const submitRegister = async () => {
           autocomplete="email"
           placeholder="you@example.com"
           required
+          class="box-border w-full p-[13px] border border-[#444] rounded-lg bg-[#101010] text-white"
         />
 
-        <label for="password">Password</label>
+        <label for="password" class="text-sm">Password</label>
         <input
           id="password"
           v-model="password"
@@ -85,118 +95,26 @@ const submitRegister = async () => {
           minlength="8"
           placeholder="At least 8 characters"
           required
+          class="box-border w-full p-[13px] border border-[#444] rounded-lg bg-[#101010] text-white"
         />
 
-        <label for="confirm-password">Confirm password</label>
-        <input
-          id="confirm-password"
-          v-model="confirmPassword"
-          type="password"
-          autocomplete="new-password"
-          placeholder="Enter your password again"
-          required
-        />
-
-        <p v-if="error" class="form-error" role="alert">
+        <p v-if="error" class="text-[#ff9696]" role="alert">
           {{ error }}
         </p>
 
-        <button type="submit" :disabled="loading">
+        <button
+          type="submit"
+          :disabled="loading"
+          class="mt-[10px] p-[13px] border-0 rounded-lg bg-[#a8e66b] text-[#111] font-bold cursor-pointer disabled:opacity-60 disabled:cursor-wait"
+        >
           {{ loading ? "Creating account..." : "Create account" }}
         </button>
       </form>
 
-      <p class="auth-footer">
+      <p class="mt-6 text-sm text-[#aaa] leading-[1.6]">
         Already have an account?
-        <RouterLink to="/login">Log in</RouterLink>
+        <RouterLink to="/login" class="text-[#a8e66b]">Log in</RouterLink>
       </p>
     </section>
   </main>
 </template>
-
-<style scoped>
-.auth-page {
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-  padding: 24px;
-  background: #101010;
-  color: #f5f5f5;
-}
-
-.auth-card {
-  width: 100%;
-  max-width: 420px;
-  box-sizing: border-box;
-  padding: 36px;
-  border: 1px solid #303030;
-  border-radius: 18px;
-  background: #191919;
-}
-
-.brand {
-  color: #a8e66b;
-  font-size: 1.5rem;
-  font-weight: 800;
-  text-decoration: none;
-}
-
-h1 {
-  margin: 28px 0 8px;
-}
-
-.auth-subtitle,
-.auth-footer {
-  color: #aaa;
-  line-height: 1.6;
-}
-
-form {
-  display: grid;
-  gap: 12px;
-  margin-top: 28px;
-}
-
-label {
-  font-size: 0.9rem;
-}
-
-input {
-  box-sizing: border-box;
-  width: 100%;
-  padding: 13px;
-  border: 1px solid #444;
-  border-radius: 8px;
-  background: #101010;
-  color: white;
-}
-
-button {
-  margin-top: 10px;
-  padding: 13px;
-  border: 0;
-  border-radius: 8px;
-  background: #a8e66b;
-  color: #111;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-button:disabled {
-  opacity: 0.6;
-  cursor: wait;
-}
-
-.form-error {
-  color: #ff9696;
-}
-
-.auth-footer {
-  margin-top: 24px;
-  font-size: 0.9rem;
-}
-
-.auth-footer a {
-  color: #a8e66b;
-}
-</style>
