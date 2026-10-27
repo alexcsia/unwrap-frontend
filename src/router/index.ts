@@ -3,7 +3,8 @@ import { createRouter, createWebHistory } from "vue-router";
 import LoginPage from "@/pages/LoginPage.vue";
 import RegisterPage from "@/pages/RegisterPage.vue";
 import DashboardPage from "@/pages/DashboardPage.vue";
-// import { getProfile } from "@/services/api";
+import PlatformPage from "@/pages/LinkPlatformPage.vue";
+import StatisticsPage from "@/pages/ListeningStats.vue";
 import { useAuthStore } from "@/stores/auth";
 
 const router = createRouter({
@@ -27,6 +28,18 @@ const router = createRouter({
       component: DashboardPage,
       meta: { requiresAuth: true },
     },
+    {
+      path: "/link",
+      name: "linkPlatforms",
+      component: PlatformPage,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/statistics",
+      name: "statistics",
+      component: StatisticsPage,
+      meta: { requiresAuth: true },
+    },
   ],
 });
 
@@ -40,9 +53,6 @@ router.beforeEach(async (to) => {
     return { name: "login", query: { redirect: to.fullPath } };
   }
 
-  if (to.meta.guestOnly && authStore.isAuthenticated) {
-    return { name: "dashboard" };
-  }
   return true;
 });
 
