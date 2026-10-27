@@ -5,6 +5,7 @@ import type {
   StatsParams,
   TimeListenedResponse,
 } from "./types/statistics";
+import type { AuthResponse, UserProfile } from "./types/auth";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -16,16 +17,6 @@ export class ApiError extends Error {
     super(message);
     this.name = "ApiError";
   }
-}
-
-export interface UserProfile {
-  id: string;
-  email: string;
-  name?: string | null;
-}
-
-export interface AuthResponse {
-  user: UserProfile;
 }
 
 export const api = axios.create({
