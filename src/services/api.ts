@@ -60,3 +60,68 @@ export const logout = () => api.post<void>("/auth/logout").then((r) => r.data);
 
 export const getProfile = () =>
   api.get<UserProfile>("/user/profile").then((r) => r.data);
+
+export const connectLastfm = () =>
+  api.get("/auth/connect/lastfm").then((r) => r.data);
+
+export interface Pagination {
+  limit: number;
+  offset: number;
+  total: number;
+  hasMore: boolean;
+  nextOffset: number | null;
+  previousOffset: number | null;
+}
+
+export interface TopArtist {
+  rank: number;
+  artistId: string;
+  artistName: string;
+  plays: number;
+  durationMs: number;
+}
+
+export interface TopTrack {
+  rank: number;
+  trackId: string;
+  trackName: string;
+  artistNames: string;
+  albumName: string;
+  plays: number;
+  durationMs: number;
+}
+
+export interface TopArtistsResponse {
+  pagination: Pagination;
+  topArtists: TopArtist[];
+}
+
+export interface TopTracksResponse {
+  pagination: Pagination;
+  topTracks: TopTrack[];
+}
+
+export interface TimeListenedResponse {
+  period: { start: string; end: string };
+  statistics: { totalMs: number; totalTracks: number };
+}
+
+export interface StatsParams {
+  from?: string;
+  to?: string;
+  limit?: number;
+  offset?: number;
+}
+
+export const getTopArtists = (params?: StatsParams) =>
+  api
+    .get<TopArtistsResponse>("/api/top-artists", { params })
+    .then((r) => r.data);
+
+export const getTopTracks = (params?: StatsParams) =>
+  api.get<TopTracksResponse>("/api/top-tracks", { params }).then((r) => r.data);
+
+export const getTimeListened = (params?: StatsParams) =>
+  api
+    .get<TimeListenedResponse>("/api/time-listened", { params })
+    .then((r) => r.data);
