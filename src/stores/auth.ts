@@ -5,8 +5,8 @@ import {
   login as apiLogin,
   register as apiRegister,
   logout as apiLogout,
-  type UserProfile,
 } from "@/services/api";
+import type { UserProfile } from "@/services/types/auth";
 
 export const useAuthStore = defineStore("auth", () => {
   const user = ref<UserProfile | null>(null);
@@ -16,13 +16,19 @@ export const useAuthStore = defineStore("auth", () => {
 
   async function fetchUser() {
     if (isInitialized.value) return;
-    try {
-      const profile = await getProfile();
+
+    if (import.meta.env.DEV) {
+      const profile = { id: "1234 ", email: " test@test.com", name: "test" };
       user.value = profile;
-    } catch {
-      user.value = null;
-    } finally {
-      isInitialized.value = true;
+    } else {
+      try {
+        const profile = await getProfile();
+        user.value = profile;
+      } catch {
+        user.value = null;
+      } finally {
+        isInitialized.value = true;
+      }
     }
   }
 
