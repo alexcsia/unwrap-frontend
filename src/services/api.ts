@@ -1,4 +1,10 @@
 import axios from "axios";
+import type {
+  TopArtistsResponse,
+  TopTracksResponse,
+  StatsParams,
+  TimeListenedResponse,
+} from "./types/statistics";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -63,55 +69,6 @@ export const getProfile = () =>
 
 export const connectLastfm = () =>
   api.get("/auth/connect/lastfm").then((r) => r.data);
-
-export interface Pagination {
-  limit: number;
-  offset: number;
-  total: number;
-  hasMore: boolean;
-  nextOffset: number | null;
-  previousOffset: number | null;
-}
-
-export interface TopArtist {
-  rank: number;
-  artistId: string;
-  artistName: string;
-  plays: number;
-  durationMs: number;
-}
-
-export interface TopTrack {
-  rank: number;
-  trackId: string;
-  trackName: string;
-  artistNames: string;
-  albumName: string;
-  plays: number;
-  durationMs: number;
-}
-
-export interface TopArtistsResponse {
-  pagination: Pagination;
-  topArtists: TopArtist[];
-}
-
-export interface TopTracksResponse {
-  pagination: Pagination;
-  topTracks: TopTrack[];
-}
-
-export interface TimeListenedResponse {
-  period: { start: string; end: string };
-  statistics: { totalMs: number; totalTracks: number };
-}
-
-export interface StatsParams {
-  from?: string;
-  to?: string;
-  limit?: number;
-  offset?: number;
-}
 
 export const getTopArtists = (params?: StatsParams) =>
   api
