@@ -1,7 +1,3 @@
-<script setup lang="ts">
-import ProfileMenu from "./ProfileMenu.vue";
-</script>
-
 <template>
   <main class="dashboard">
     <header class="header">
@@ -9,8 +5,6 @@ import ProfileMenu from "./ProfileMenu.vue";
         <h1>Unwrap</h1>
         <p class="subtitle">Your music, understood.</p>
       </div>
-
-      <ProfileMenu />
     </header>
 
     <section class="hero">
