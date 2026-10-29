@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { getProfile, linkPlatform, logout } from "@/services/api";
+import { getProfile, logout } from "@/services/api";
 
 const isOpen = ref(false);
 const loading = ref(false);
@@ -33,8 +33,8 @@ const connectSpotify = async () => {
   error.value = null;
 
   try {
-    const result = await linkPlatform("spotify");
-    window.location.href = result.redirectUrl;
+    // const result = await linkPlatform("spotify");
+    // window.location.href = result.redirectUrl;
   } catch (err) {
     console.error(err);
     error.value = "Could not start platform connection.";
@@ -60,9 +60,9 @@ const signOut = async () => {
 </script>
 
 <template>
-  <div class="profile-menu">
+  <div class="relative">
     <button
-      class="menu-button"
+      class="px-3.5 py-2.5 border border-[#444] rounded-lg bg-[#191919] text-white cursor-pointer"
       type="button"
       @click="toggleMenu"
       aria-label="Open profile menu"
@@ -71,10 +71,13 @@ const signOut = async () => {
       ☰
     </button>
 
-    <div v-if="isOpen" class="dropdown">
+    <div
+      v-if="isOpen"
+      class="absolute z-10 top-[calc(100%+8px)] right-0 min-w-[180px] p-2 border border-[#333] rounded-[10px] bg-[#191919] shadow-[0_8px_24px_#0005]"
+    >
       <button
         type="button"
-        class="dropdown-item"
+        class="block w-full p-[11px] border-0 rounded-md bg-transparent text-white text-left cursor-pointer hover:bg-[#303030] disabled:opacity-50"
         :disabled="loading"
         @click="openProfile"
       >
@@ -83,7 +86,7 @@ const signOut = async () => {
 
       <button
         type="button"
-        class="dropdown-item"
+        class="block w-full p-[11px] border-0 rounded-md bg-transparent text-white text-left cursor-pointer hover:bg-[#303030] disabled:opacity-50"
         :disabled="loading"
         @click="connectSpotify"
       >
@@ -92,70 +95,20 @@ const signOut = async () => {
 
       <button
         type="button"
-        class="dropdown-item"
+        class="block w-full p-[11px] border-0 rounded-md bg-transparent text-white text-left cursor-pointer hover:bg-[#303030] disabled:opacity-50"
         :disabled="loading"
         @click="signOut"
       >
         Log out
       </button>
 
-      <p v-if="error" class="error" role="alert">
+      <p
+        v-if="error"
+        class="px-[10px] text-[#ff9696] text-[0.85rem]"
+        role="alert"
+      >
         {{ error }}
       </p>
     </div>
   </div>
 </template>
-
-<style scoped>
-.profile-menu {
-  position: relative;
-}
-
-.menu-button {
-  padding: 10px 14px;
-  border: 1px solid #444;
-  border-radius: 8px;
-  background: #191919;
-  color: white;
-  cursor: pointer;
-}
-
-.dropdown {
-  position: absolute;
-  z-index: 10;
-  top: calc(100% + 8px);
-  right: 0;
-  min-width: 180px;
-  padding: 8px;
-  border: 1px solid #333;
-  border-radius: 10px;
-  background: #191919;
-  box-shadow: 0 8px 24px #0005;
-}
-
-.dropdown-item {
-  display: block;
-  width: 100%;
-  padding: 11px;
-  border: 0;
-  border-radius: 6px;
-  background: transparent;
-  color: white;
-  text-align: left;
-  cursor: pointer;
-}
-
-.dropdown-item:hover {
-  background: #303030;
-}
-
-.dropdown-item:disabled {
-  opacity: 0.5;
-}
-
-.error {
-  padding: 0 10px;
-  color: #ff9696;
-  font-size: 0.85rem;
-}
-</style>

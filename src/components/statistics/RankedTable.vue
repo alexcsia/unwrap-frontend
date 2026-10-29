@@ -41,6 +41,7 @@ function cell(col: RankedColumn, row: any): string {
         <tr>
           <th
             v-for="col in columns"
+            :key="col.key"
             class="text-left px-3 py-2 text-xs font-semibold uppercase tracking-wider text-neutral-400 border-b border-[#262626]"
           >
             {{ col.label }}
