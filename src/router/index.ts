@@ -5,6 +5,7 @@ import RegisterPage from "@/pages/RegisterPage.vue";
 import DashboardPage from "@/pages/DashboardPage.vue";
 import PlatformPage from "@/pages/LinkPlatformPage.vue";
 import StatisticsPage from "@/pages/ListeningStats.vue";
+import PlatformsConnectedPage from "@/pages/PlatformsPage.vue";
 import { useAuthStore } from "@/stores/auth";
 
 const router = createRouter({
@@ -38,6 +39,12 @@ const router = createRouter({
       path: "/statistics",
       name: "statistics",
       component: StatisticsPage,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/platforms",
+      name: "platforms",
+      component: PlatformsConnectedPage,
       meta: { requiresAuth: true },
     },
   ],

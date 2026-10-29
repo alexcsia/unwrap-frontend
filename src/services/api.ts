@@ -57,8 +57,8 @@ export const logout = () => api.post<void>("/auth/logout").then((r) => r.data);
 export const getProfile = () =>
   api.get<UserProfile>("/user/profile").then((r) => r.data);
 
-export const connectLastfm = () =>
-  api.get("/auth/connect/lastfm").then((r) => r.data);
+export const connectSpotifyUrl = `${API_URL}/auth/connect/spotify`;
+export const connectLastfmUrl = `${API_URL}/auth/connect/lastfm`;
 
 export const getTopArtists = (params?: StatsParams) =>
   api
