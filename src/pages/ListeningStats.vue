@@ -117,7 +117,7 @@ async function loadArtists() {
 const artistColumns: RankedColumn[] = [
   { key: "rank", label: "#" },
   { key: "artistName", label: "Artist" },
-  { key: "plays", label: "Plays" },
+  { key: "playCount", label: "Plays" },
   {
     key: "durationMs",
     label: "Time",

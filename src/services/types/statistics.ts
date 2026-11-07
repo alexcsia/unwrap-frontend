@@ -11,7 +11,7 @@ export interface TopArtist {
   rank: number;
   artistId: string;
   artistName: string;
-  plays: number;
+  playCount: number;
   durationMs: number;
 }
 
