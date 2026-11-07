@@ -21,20 +21,34 @@ export class ApiError extends Error {
 export const api = axios.create({
   baseURL: API_URL,
   withCredentials: true,
+  headers: { "X-Requested-With": "XMLHttpRequest" },
 });
+
+let refreshPromise: Promise<unknown> | null = null;
 
 api.interceptors.response.use(
   (res) => res,
   async (error) => {
-    const original = error.config;
+    const original = error.config as any;
 
     if (
       error.response?.status === 401 &&
+      original &&
       !original._retry &&
-      !original.url.includes("/auth/")
+      !original.url?.includes("/auth/")
     ) {
       original._retry = true;
-      await api.post("/auth/refresh");
+
+      refreshPromise ??= api.post("/auth/refresh").finally(() => {
+        refreshPromise = null;
+      });
+
+      try {
+        await refreshPromise;
+      } catch {
+        window.location.href = "/login";
+        return Promise.reject(error);
+      }
       return api(original);
     }
 
@@ -47,9 +61,13 @@ export const login = (email: string, password: string) =>
     .post<AuthResponse>("/auth/login", { email, password })
     .then((r) => r.data);
 
-export const register = (name: string, email: string, password: string) =>
+export const register = (
+  displayName: string,
+  email: string,
+  password: string,
+) =>
   api
-    .post<AuthResponse>("/auth/register", { name, email, password })
+    .post<AuthResponse>("/register", { displayName, email, password })
     .then((r) => r.data);
 
 export const logout = () => api.post<void>("/auth/logout").then((r) => r.data);
@@ -57,8 +75,23 @@ export const logout = () => api.post<void>("/auth/logout").then((r) => r.data);
 export const getProfile = () =>
   api.get<UserProfile>("/user/profile").then((r) => r.data);
 
-export const connectSpotifyUrl = `${API_URL}/auth/connect/spotify`;
-export const connectLastfmUrl = `${API_URL}/auth/connect/lastfm`;
+export type PlatformName = "spotify" | "lastfm";
+
+export interface PlatformSummary {
+  platformName: PlatformName;
+  connectedAt: string;
+}
+
+export const getPlatforms = () =>
+  api
+    .get<{ platforms: PlatformSummary[] }>("/platforms/")
+    .then((r) => r.data.platforms);
+
+export const connectPlatform = (platform: PlatformName) =>
+  api.get<{ url: string }>(`/auth/connect/${platform}`).then((r) => r.data.url);
+
+export const disconnectPlatform = (platform: PlatformName) =>
+  api.delete(`/platforms/${platform}`);
 
 export const getTopArtists = (params?: StatsParams) =>
   api

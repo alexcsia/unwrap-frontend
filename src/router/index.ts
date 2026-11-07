@@ -3,9 +3,8 @@ import { createRouter, createWebHistory } from "vue-router";
 import LoginPage from "@/pages/LoginPage.vue";
 import RegisterPage from "@/pages/RegisterPage.vue";
 import DashboardPage from "@/pages/DashboardPage.vue";
-import PlatformPage from "@/pages/LinkPlatformPage.vue";
 import StatisticsPage from "@/pages/ListeningStats.vue";
-import PlatformsConnectedPage from "@/pages/PlatformsPage.vue";
+import Platforms from "@/pages/Platforms.vue";
 import { useAuthStore } from "@/stores/auth";
 
 const router = createRouter({
@@ -29,12 +28,7 @@ const router = createRouter({
       component: DashboardPage,
       meta: { requiresAuth: true },
     },
-    {
-      path: "/link",
-      name: "linkPlatforms",
-      component: PlatformPage,
-      meta: { requiresAuth: true },
-    },
+
     {
       path: "/statistics",
       name: "statistics",
@@ -44,7 +38,7 @@ const router = createRouter({
     {
       path: "/platforms",
       name: "platforms",
-      component: PlatformsConnectedPage,
+      component: Platforms,
       meta: { requiresAuth: true },
     },
   ],

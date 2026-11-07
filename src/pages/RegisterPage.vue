@@ -6,7 +6,6 @@ import { register, ApiError } from "@/services/api";
 const name = ref("");
 const email = ref("");
 const password = ref("");
-const confirmPassword = ref("");
 const loading = ref(false);
 const error = ref("");
 
@@ -15,18 +14,20 @@ const router = useRouter();
 const submitRegister = async () => {
   error.value = "";
 
-  if (!name.value.trim() || !email.value.trim()) {
-    error.value = "Please complete all fields.";
+  const trimmedName = name.value.trim();
+  if (!trimmedName || trimmedName.length < 3 || trimmedName.length > 30) {
+    error.value = "Name must be between 3 and 30 characters.";
     return;
   }
 
-  if (password.value.length < 8) {
-    error.value = "Password must be at least 8 characters.";
+  const trimmedEmail = email.value.trim();
+  if (!trimmedEmail || trimmedEmail.length > 254) {
+    error.value = "Please enter a valid email address.";
     return;
   }
 
-  if (password.value !== confirmPassword.value) {
-    error.value = "Passwords do not match.";
+  if (password.value.length < 8 || password.value.length > 72) {
+    error.value = "Password must be between 8 and 72 characters.";
     return;
   }
 
@@ -71,6 +72,8 @@ const submitRegister = async () => {
           v-model.trim="name"
           autocomplete="name"
           placeholder="Your name"
+          minlength="3"
+          maxlength="30"
           required
           class="box-border w-full p-[13px] border border-[#444] rounded-lg bg-[#101010] text-white"
         />
@@ -82,6 +85,7 @@ const submitRegister = async () => {
           type="email"
           autocomplete="email"
           placeholder="you@example.com"
+          maxlength="254"
           required
           class="box-border w-full p-[13px] border border-[#444] rounded-lg bg-[#101010] text-white"
         />
@@ -93,6 +97,7 @@ const submitRegister = async () => {
           type="password"
           autocomplete="new-password"
           minlength="8"
+          maxlength="72"
           placeholder="At least 8 characters"
           required
           class="box-border w-full p-[13px] border border-[#444] rounded-lg bg-[#101010] text-white"
