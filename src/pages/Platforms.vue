@@ -8,7 +8,7 @@ import { usePlatformCallback } from "@/composables/usePlatformCallback";
 const { get, isPending, isError } = usePlatforms();
 const { connect, disconnect } = usePlatformActions();
 
-const { notice } = usePlatformCallback();
+usePlatformCallback();
 
 const PLATFORMS: {
   name: PlatformName;
@@ -46,7 +46,6 @@ function onDisconnect(name: PlatformName, label: string) {
   <main class="flex min-h-screen w-full flex-col bg-neutral-950 text-white">
     <h1 class="text-2xl font-bold">Your platforms</h1>
 
-    <p v-if="notice" role="status">{{ notice }}</p>
     <p v-if="connect.isError.value" role="alert">
       Could not start the connection.
     </p>
