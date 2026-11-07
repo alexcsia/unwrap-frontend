@@ -1,17 +1,14 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
 import { usePlatforms, usePlatformActions } from "@/composables/usePlatforms";
 import type { PlatformName } from "@/services/api";
 import PlatformCard from "@/components/platforms/PlatformCard.vue";
 import ConnectionCard from "@/components/platforms/ConnectionCard.vue";
+import { usePlatformCallback } from "@/composables/usePlatformCallback";
 
-const route = useRoute();
-const router = useRouter();
-const { get, isPending, isError, refetch } = usePlatforms();
+const { get, isPending, isError } = usePlatforms();
 const { connect, disconnect } = usePlatformActions();
 
-const notice = ref<string | null>(null);
+const { notice } = usePlatformCallback();
 
 const PLATFORMS: {
   name: PlatformName;
@@ -37,18 +34,6 @@ const PLATFORMS: {
     theme: "red",
   },
 ];
-
-onMounted(() => {
-  if (route.query.connected) {
-    notice.value = `Platform connected, ${route.query.connected} `;
-  }
-  if (route.query.error) notice.value = "Could not connect. Please try again.";
-  if (route.query.connected || route.query.error) {
-    refetch();
-
-    router.replace({ query: {} });
-  }
-});
 
 function onDisconnect(name: PlatformName, label: string) {
   if (confirm(`Disconnect ${label}?`)) {
