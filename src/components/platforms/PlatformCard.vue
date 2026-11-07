@@ -8,6 +8,12 @@ defineProps<{
 
 const emit = defineEmits<{ (e: "link"): void }>();
 
+const handleClick = () => {
+  console.log("1. Button clicked");
+  emit("link");
+  console.log("2. Event emitted");
+};
+
 const themes = {
   emerald: {
     hoverBg: "hover:bg-emerald-500/15",
@@ -27,13 +33,10 @@ const themes = {
 
 <template>
   <section
-    class="group relative flex min-h-[50vh] flex-1 cursor-pointer items-center overflow-hidden border-b border-white/10 bg-neutral-950 p-8 transition-colors duration-500 md:min-h-screen md:border-b-0 md:border-r"
+    class="group relative flex min-h-[50vh] flex-1 items-center overflow-hidden border-b border-white/10 bg-neutral-950 p-8 transition-colors duration-500 md:min-h-screen md:border-b-0 md:border-r"
     :class="themes[theme].hoverBg"
     role="link"
     tabindex="0"
-    @click="emit(`link`)"
-    @keydown.enter="emit('link')"
-    @keydown.space.prevent="emit('link')"
   >
     <div class="relative z-10 mx-auto max-w-md text-center">
       <h1 class="mb-5 text-5xl font-bold tracking-tight md:text-7xl">
@@ -48,12 +51,14 @@ const themes = {
 
       <button
         type="button"
-        class="inline-flex items-center gap-3 rounded-full border border-white/20 px-7 py-3.5 font-medium transition-all duration-300"
-        :class="(themes[theme].buttonHover, themes[theme].groupBorder)"
-        @click.stop="emit('link')"
+        class="inline-flex items-center gap-3 rounded-full border border-white/20 px-7 py-3.5 cursor-pointer font-medium transition-all duration-300"
+        :class="[themes[theme].buttonHover, themes[theme].groupBorder]"
+        @click="handleClick"
       >
         {{ buttonText }}
       </button>
     </div>
   </section>
 </template>
+
+<!-- @click="emit('link')" -->
