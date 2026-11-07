@@ -43,6 +43,9 @@ export interface TimeListenedResponse {
 export interface StatsParams {
   from?: string;
   to?: string;
-  limit?: number;
-  offset?: number;
+  year?: number;
+  month?: number;
+  date?: string;
+  limit: number;
+  offset: number;
 }

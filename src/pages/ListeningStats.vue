@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed, watch } from "vue";
 import StatCard from "@/components/statistics/StatCard.vue";
 import RankedTable, {
   type RankedColumn,
@@ -15,21 +15,47 @@ import { VueDatePicker } from "@vuepic/vue-datepicker";
 
 import "@vuepic/vue-datepicker/dist/main.css";
 
-const dates = ref<[Date, Date] | null>(null);
+type FilterMode = "all" | "year" | "month" | "day" | "range";
+
+const MODES: { value: FilterMode; label: string }[] = [
+  { value: "all", label: "All time" },
+  { value: "year", label: "Year" },
+  { value: "month", label: "Month" },
+  { value: "day", label: "Day" },
+  { value: "range", label: "Custom range" },
+];
+
+const mode = ref<FilterMode>("all");
+
+const currentYear = new Date().getFullYear();
+const years = Array.from(
+  { length: currentYear - 1999 },
+  (_, i) => currentYear - i,
+);
+
+const MONTHS = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+const selectedYear = ref(currentYear);
+const selectedMonth = ref(new Date().getMonth() + 1);
+const selectedDay = ref<Date | null>(null);
+const selectedRange = ref<[Date, Date] | null>(null);
 
 function dateString(d: Date): string {
-  return d.toLocaleDateString("en-CA");
+  return d.toLocaleDateString("en-CA"); // yyyy-mm-dd
 }
-
-const buildParams = (): StatsParams => {
-  console.log("from", dates.value![0], "to:", dates.value![1]);
-  return {
-    from: dates.value ? dateString(dates.value[0]) : undefined,
-    to: dates.value ? dateString(dates.value[1]) : undefined,
-    limit: 10,
-    offset: 0,
-  };
-};
 
 function formatDuration(raw: number): string {
   const s = Math.floor(raw / 1_000);
@@ -42,6 +68,33 @@ function formatDuration(raw: number): string {
 }
 
 const fmtDate = (iso: string) => new Date(iso).toLocaleDateString();
+
+const buildParams = (): StatsParams => {
+  const base: StatsParams = { limit: 10, offset: 0 };
+
+  switch (mode.value) {
+    case "year":
+      return { ...base, year: selectedYear.value };
+    case "month":
+      return { ...base, year: selectedYear.value, month: selectedMonth.value };
+    case "day":
+      return selectedDay.value
+        ? { ...base, date: dateString(selectedDay.value) }
+        : base;
+    case "range":
+      return selectedRange.value
+        ? {
+            ...base,
+            from: dateString(selectedRange.value[0]),
+            to: dateString(selectedRange.value[1]),
+          }
+        : base;
+
+    case "all":
+    default:
+      return base;
+  }
+};
 
 const artists = ref<TopArtist[]>([]);
 const artistsLoading = ref(false);
@@ -125,21 +178,79 @@ function loadAll() {
   loadTracks();
   loadTimeListened();
 }
+
+const filterKey = computed(() => JSON.stringify(buildParams));
+watch(filterKey, () => loadAll());
 </script>
 
 <template>
   <main class="flex flex-col gap-5 p-6 text-white">
     <header class="flex items-center justify-between gap-4 flex-wrap">
-      <VueDatePicker
-        v-model="dates"
-        range
-        auto-apply
-        :enable-time-picker="false"
-        placeholder="Select date range"
-      />
-      <div>
-        <h1 class="text-2xl font-bold m-0 text-[#191919]">Listening stats</h1>
+      <div class="flex items-center gap-3 flex-wrap">
+        <div class="flex gap-1 rounded-lg bg-neutral-200 p-1">
+          <button
+            v-for="m in MODES"
+            :key="m.value"
+            type="button"
+            class="px-3 py-1.5 rounded-md text-sm font-medium cursor-pointer transition"
+            :class="
+              mode === m.value
+                ? 'bg-white text-[#191919] shadow-sm'
+                : 'text-neutral-600 hover:text-[#191919]'
+            "
+            @click="mode = m.value"
+          >
+            {{ m.label }}
+          </button>
+        </div>
       </div>
+
+      <template v-if="mode === 'year'">
+        <select
+          v-model.number="selectedYear"
+          class="px-3 py-2 rounded-lg border border-neutral-700 bg-[#191919] text-white"
+        >
+          <option v-for="y in years" :key="y" :value="y">{{ y }}</option>
+        </select>
+      </template>
+
+      <template v-else-if="mode === 'month'">
+        <select
+          v-model.number="selectedMonth"
+          class="px-3 py-2 rounded-lg border border-neutral-700 bg-[#191919] text-white"
+        >
+          <option v-for="(name, i) in MONTHS" :key="i" :value="i + 1">
+            {{ name }}
+          </option>
+        </select>
+        <select
+          v-model.number="selectedYear"
+          class="px-3 py-2 rounded-lg border border-neutral-700 bg-[#191919] text-white"
+        >
+          <option v-for="y in years" :key="y" :value="y">{{ y }}</option>
+        </select>
+      </template>
+
+      <template v-else-if="mode === 'day'">
+        <VueDatePicker
+          v-model="selectedDay"
+          :enable-time-picker="false"
+          auto-apply
+          placeholder="Pick a day"
+        />
+      </template>
+
+      <template v-else-if="mode === 'range'">
+        <VueDatePicker
+          v-model="selectedRange"
+          range
+          :enable-time-picker="false"
+          auto-apply
+          placeholder="Select range"
+        />
+      </template>
+
+      <h1 class="text-2xl font-bold m-0 text-[#191919]">Listening stats</h1>
 
       <button
         type="button"
