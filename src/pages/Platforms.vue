@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import { usePlatforms, usePlatformActions } from "@/composables/usePlatforms";
+import {
+  usePlatforms,
+  usePlatformActions,
+} from "@/composables/platforms/usePlatforms";
 import type { PlatformName } from "@/services/api";
 import PlatformCard from "@/components/platforms/PlatformCard.vue";
 import ConnectionCard from "@/components/platforms/ConnectionCard.vue";
-import { usePlatformCallback } from "@/composables/usePlatformCallback";
+import { usePlatformCallback } from "@/composables/platforms/usePlatformCallback";
 
 const { get, isPending, isError } = usePlatforms();
 const { connect, disconnect } = usePlatformActions();
