@@ -109,13 +109,12 @@ function loadAll() {
   loadTimeListened();
 }
 
-const filterKey = computed(() => JSON.stringify(buildParams()));
-watch(filterKey, () => loadAll());
+computed(() => JSON.stringify(buildParams()));
 </script>
 
 <template>
   <main class="flex flex-col gap-5 p-6 text-white">
-    <header class="flex items-center justify-between gap-4 flex-wrap">
+    <header class="flex items-center mt-5 justify-between gap-4 flex-wrap">
       <div class="flex items-center gap-3 flex-wrap">
         <div class="flex gap-1 rounded-lg bg-neutral-200 p-1">
           <button
@@ -164,7 +163,7 @@ watch(filterKey, () => loadAll());
       <template v-else-if="mode === 'day'">
         <VueDatePicker
           v-model="selectedDay"
-          :enable-time-picker="false"
+          :time-config="{ enableTimePicker: false }"
           auto-apply
           placeholder="Pick a day"
         />
@@ -174,7 +173,7 @@ watch(filterKey, () => loadAll());
         <VueDatePicker
           v-model="selectedRange"
           range
-          :enable-time-picker="false"
+          :time-config="{ enableTimePicker: false }"
           auto-apply
           placeholder="Select range"
         />
