@@ -128,3 +128,48 @@ export const searchEntity = (params: SearchEntityParams) =>
   api
     .get<{ result: SearchEntityResponse }>("/api/history/search", { params })
     .then((r) => r.data.result);
+
+export type Exclusions = {
+  artists: {
+    type: "artist";
+    artistId: string;
+    artistName: string;
+    excludedAt: Date;
+  }[];
+  tracks: {
+    type: "track";
+    trackId: string;
+    trackName: string;
+    artistName: string;
+    albumName: string;
+    excludedAt: Date;
+  }[];
+};
+
+export const fetchExclusions = () =>
+  api
+    .get<{ exclusions: Exclusions }>("/api/exclusions")
+    .then((r) => r.data.exclusions);
+
+export type createExclusionResponse = {
+  id: string;
+  name: string;
+  excludedAt: Date;
+};
+
+export type exclusionsPayload = {
+  type: "track" | "artist";
+  targetId: string;
+};
+
+export const createExclusion = (payload: exclusionsPayload) =>
+  api
+    .post<createExclusionResponse>("/api/exclusions", payload)
+    .then((r) => r.data);
+
+export const deleteExclusion = (params: exclusionsPayload) =>
+  api
+    .delete<{
+      message: string;
+    }>(`/api/exclusions/${params.type}/${params.targetId}`)
+    .then((r) => r.data);
