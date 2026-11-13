@@ -6,6 +6,7 @@ import {
   disconnectPlatform,
   type PlatformName,
 } from "@/services/api";
+import { toast } from "vue-sonner";
 
 const KEY = ["platforms"];
 
@@ -17,7 +18,6 @@ export function usePlatforms() {
   });
 
   const platforms = computed(() => query.data.value ?? []) as any;
-  console.log("computed paltforms", platforms);
   const hasPlatform = computed(() => platforms.value.length > 0);
   const get = (name: PlatformName) =>
     platforms.value.find((p: any) => p.platformName === name);
@@ -31,7 +31,6 @@ export function usePlatformActions() {
   const connect = useMutation({
     mutationFn: connectPlatform,
     onSuccess: (url) => {
-      console.log("received url", url);
       window.location.href = url;
     },
   });
@@ -39,8 +38,11 @@ export function usePlatformActions() {
   const disconnect = useMutation({
     mutationFn: disconnectPlatform,
     onSuccess: () => {
-      console.log("success");
+      toast.success("Platform disconnected successfully!");
       qc.invalidateQueries({ queryKey: KEY });
+    },
+    onError: () => {
+      toast.error("Could not disconnect platform.");
     },
   });
 

@@ -2,6 +2,7 @@ import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import type { PlatformName } from "@/services/api";
 import { useQueryClient } from "@tanstack/vue-query";
+import { toast } from "vue-sonner";
 
 const VALID_PLATFORMS: PlatformName[] = ["spotify", "lastfm"];
 
@@ -9,8 +10,6 @@ export function usePlatformCallback() {
   const route = useRoute();
   const router = useRouter();
   const qc = useQueryClient();
-
-  const notice = ref<string | null>(null);
 
   onMounted(async () => {
     const connected = route.query.connected;
@@ -20,16 +19,14 @@ export function usePlatformCallback() {
       typeof connected === "string" &&
       VALID_PLATFORMS.includes(connected as PlatformName)
     ) {
-      notice.value = `${connected} connected successfully!`;
+      toast.success(`${connected} connected successfully!`);
       await qc.invalidateQueries({ queryKey: ["platforms"] });
     } else if (error) {
-      notice.value = "Could not connect. Please try again.";
+      toast.error("Could not connect. Please try again.");
     }
 
     if (connected || error) {
       await router.replace({ query: {} });
     }
   });
-
-  return { notice };
 }
