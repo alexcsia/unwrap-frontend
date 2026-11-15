@@ -9,9 +9,7 @@ defineProps<{
 const emit = defineEmits<{ (e: "link"): void }>();
 
 const handleClick = () => {
-  console.log("1. Button clicked");
   emit("link");
-  console.log("2. Event emitted");
 };
 
 const themes = {
@@ -60,5 +58,3 @@ const themes = {
     </div>
   </section>
 </template>
-
-<!-- @click="emit('link')" -->

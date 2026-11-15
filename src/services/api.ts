@@ -106,11 +106,7 @@ export const getTimeListened = (params?: StatsParams) =>
     .get<TimeListenedResponse>("/api/time-listened", { params })
     .then((r) => r.data);
 
-export type SearchEntityResponse = Array<{
-  id: string;
-  name: string;
-  entityType: "track" | "artist";
-}>;
+export type SearchEntityResponse = Entity[];
 
 export type Entity = {
   entityType: "track" | "artist";

@@ -14,7 +14,22 @@ const handleAddExclusion = async (
   targetId: string,
   type: "track" | "artist",
 ) => {
-  await add.mutateAsync({ targetId, type });
+  if (type === "track") {
+    const ids = exclusions.value.tracks.map((t) => t.trackId);
+    if (ids.includes(targetId)) {
+      return;
+    } else {
+      await add.mutateAsync({ targetId, type });
+      console.log("excluding");
+    }
+  }
+  if (type === "artist") {
+    const ids = exclusions.value.artists.map((t) => t.artistId);
+    if (ids.includes(targetId)) {
+      return;
+    } else await add.mutateAsync({ targetId, type });
+    console.log("excluding");
+  }
 };
 
 const handleDeletion = async (targetId: string, type: "artist" | "track") => {
@@ -29,7 +44,10 @@ const handleDeletion = async (targetId: string, type: "artist" | "track") => {
     <main
       class="flex-1 w-full max-w-5xl mx-auto p-6 md:p-10 flex flex-col gap-8"
     >
-      <ExclusionSearchSection :on-add="handleAddExclusion" />
+      <ExclusionSearchSection
+        :on-add="handleAddExclusion"
+        :exclusions="exclusions"
+      />
       <ExclusionListSection
         :exclusions="exclusions"
         :is-pending="isPending"

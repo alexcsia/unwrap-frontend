@@ -1,13 +1,20 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { searchEntity, type SearchEntityResponse } from "@/services/api";
+import {
+  searchEntity,
+  type Exclusions,
+  type Entity,
+  type SearchEntityResponse,
+} from "@/services/api";
 import { toast } from "vue-sonner";
 
 const props = defineProps<{
   onAdd: (targetId: string, type: "track" | "artist") => Promise<void>;
+  exclusions: Exclusions;
 }>();
 
 const entities = ref<SearchEntityResponse | null>(null);
+const lastFetched = ref<Entity | null>(null);
 const typeToExclude = ref<"track" | "artist" | null>(null);
 const entityName = ref<string | null>(null);
 
@@ -15,6 +22,10 @@ const entityTypes: { label: "track" | "artist" }[] = [
   { label: "track" },
   { label: "artist" },
 ];
+
+const handleAdd = (id: string, type: "track" | "artist") => {
+  props.onAdd(id, type);
+};
 
 const setType = (type: "track" | "artist") => {
   typeToExclude.value = type;
@@ -32,13 +43,27 @@ const handleSearch = async () => {
     return;
   }
 
+  //initially cursor = null
+  //but when scrolling/on button press, should load more with the
+  //cursor set to entityId of last rendered entity
+
+  //add pagination to know if it should return more/ how many more are left upon loading more
+
+  console.log("cursor", lastFetched.value?.id);
   try {
     entities.value = await searchEntity({
       type: typeToExclude.value,
       name: entityName.value,
       limit: 10,
-      cursor: null,
+      cursor: lastFetched.value?.id ?? null,
     });
+
+    lastFetched.value =
+      entities.value && entities.value.length > 0
+        ? entities.value[entities.value.length - 1]
+        : null;
+
+    console.log("curosr now:", lastFetched.value?.id);
   } catch (err) {
     toast.error("Search failed, please try again.");
   }
@@ -109,10 +134,23 @@ const handleSearch = async () => {
         >
           <span class="font-medium text-[#f5f5f5]">{{ e.name }}</span>
           <button
-            class="bg-transparent text-[#a8e66b] border border-[#a8e66b] px-3 py-1.5 rounded-md text-xs font-semibold hover:bg-[#a8e66b] hover:text-[#191919] transition-all"
-            @click="props.onAdd(e.id, typeToExclude!)"
+            class="bg-transparent cursor-pointer text-[#a8e66b] border border-[#a8e66b] px-3 py-1.5 rounded-md text-xs font-semibold hover:bg-[#a8e66b] hover:text-[#191919] transition-all"
+            :disabled="
+              typeToExclude === 'track'
+                ? exclusions?.tracks?.some((t) => t.trackId === e.id)
+                : exclusions?.artists?.some((a) => a.artistId === e.id)
+            "
+            @click="handleAdd(e.id, typeToExclude!)"
           >
-            Exclude
+            {{
+              typeToExclude === "track"
+                ? exclusions?.tracks?.some((t) => t.trackId === e.id)
+                  ? "Already excluded"
+                  : "Exclude"
+                : exclusions?.artists?.some((a) => a.artistId === e.id)
+                  ? "Already excluded"
+                  : "Exclude"
+            }}
           </button>
         </li>
       </ul>

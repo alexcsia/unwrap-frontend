@@ -48,7 +48,7 @@ const submitLogin = async () => {
     class="min-h-screen grid place-items-center p-6 bg-[#f5f5f5] text-[#f5f5f5]"
   >
     <section
-      class="w-full max-w-[420px] p-9 border border-[#303030] rounded-[18px] bg-[#191919]"
+      class="w-full max-w-105 p-9 border border-[#303030] rounded-[18px] bg-[#191919]"
     >
       <RouterLink
         to="/"
