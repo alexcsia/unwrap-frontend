@@ -1,4 +1,4 @@
-import { onMounted, ref } from "vue";
+import { onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import type { PlatformName } from "@/services/api";
 import { useQueryClient } from "@tanstack/vue-query";
