@@ -44,7 +44,7 @@ defineProps<{
             }}</span>
             <button
               @click="onDelete(artist.artistId, artist.type)"
-              class="text-red-400 hover:text-red-300 text-sm font-medium px-3 py-1 rounded transition-colors"
+              class="text-red-400 hover:text-red-300 cursor-pointer text-sm font-medium px-3 py-1 rounded transition-colors"
             >
               Delete
             </button>
@@ -74,7 +74,7 @@ defineProps<{
             </div>
             <button
               @click="onDelete(track.trackId, track.type)"
-              class="text-red-400 hover:text-red-300 text-sm font-medium px-3 py-1 rounded transition-colors"
+              class="text-red-400 hover:text-red-300 cursor-pointer text-sm font-medium px-3 py-1 rounded transition-colors"
             >
               Delete
             </button>
