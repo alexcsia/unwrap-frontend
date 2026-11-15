@@ -48,6 +48,12 @@ const router = createRouter({
       component: ExclusionsPage,
       meta: { requiresAuth: true },
     },
+    {
+      path: "/history-upload",
+      name: "upload",
+      component: FileUploadPage,
+      meta: { requiresAuth: true },
+    },
   ],
 });
 
