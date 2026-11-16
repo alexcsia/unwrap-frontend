@@ -3,18 +3,18 @@ import ProfileMenu from "./ProfileMenu.vue";
 </script>
 
 <template>
-  <main class="w-full h-20 bg-background">
-    <div
-      class="flex items-center justify-between w-full h-full px-6 py-3 border border-white/10 bg-surface"
-    >
+  <header
+    class="sticky top-0 z-50 w-full border-b border-white/10 bg-surface/95 backdrop-blur-md"
+  >
+    <nav class="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
       <RouterLink
         to="/"
-        class="px-2 text-2xl font-extrabold text-brand no-underline"
+        class="text-xl font-extrabold tracking-tight text-brand no-underline transition-opacity hover:opacity-80"
       >
         Unwrap
       </RouterLink>
 
       <ProfileMenu />
-    </div>
-  </main>
+    </nav>
+  </header>
 </template>
