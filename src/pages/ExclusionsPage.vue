@@ -38,7 +38,7 @@ const handleDeletion = async (targetId: string, type: "artist" | "track") => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#f5f5f5] text-[#f5f5f5] flex flex-col">
+  <div class="min-h-screen bg-background text-background flex flex-col">
     <Navbar />
 
     <main

@@ -51,14 +51,12 @@ const submitRegister = async () => {
 
 <template>
   <main
-    class="min-h-screen grid place-items-center p-4 bg-[#f5f5f5] text-[#f5f5f5]"
+    class="min-h-screen grid place-items-center p-4 bg-background text-background"
   >
     <section
-      class="w-full max-w-[420px] box-border p-5 border border-[#303030] rounded-[18px] bg-[#191919]"
+      class="w-full max-w-[420px] box-border p-5 border border-[#303030] rounded-[18px] bg-surface"
     >
-      <RouterLink
-        to="/"
-        class="text-[#a8e66b] text-2xl font-extrabold no-underline"
+      <RouterLink to="/" class="text-brand text-2xl font-extrabold no-underline"
         >Unwrap</RouterLink
       >
 
@@ -103,14 +101,14 @@ const submitRegister = async () => {
           class="box-border w-full p-[13px] border border-[#444] rounded-lg bg-[#101010] text-white"
         />
 
-        <p v-if="error" class="text-[#ff9696]" role="alert">
+        <p v-if="error" class="text-error" role="alert">
           {{ error }}
         </p>
 
         <button
           type="submit"
           :disabled="loading"
-          class="mt-[10px] p-[13px] border-0 rounded-lg bg-[#a8e66b] text-[#111] font-bold cursor-pointer disabled:opacity-60 disabled:cursor-wait"
+          class="mt-[10px] p-[13px] border-0 rounded-lg bg-brand text-[#111] font-bold cursor-pointer disabled:opacity-60 disabled:cursor-wait"
         >
           {{ loading ? "Creating account..." : "Create account" }}
         </button>
@@ -118,7 +116,7 @@ const submitRegister = async () => {
 
       <p class="mt-6 text-sm text-[#aaa] leading-[1.6]">
         Already have an account?
-        <RouterLink to="/login" class="text-[#a8e66b]">Log in</RouterLink>
+        <RouterLink to="/login" class="text-brand">Log in</RouterLink>
       </p>
     </section>
   </main>

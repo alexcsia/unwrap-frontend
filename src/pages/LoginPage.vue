@@ -45,14 +45,12 @@ const submitLogin = async () => {
 
 <template>
   <main
-    class="min-h-screen grid place-items-center p-6 bg-[#f5f5f5] text-[#f5f5f5]"
+    class="min-h-screen grid place-items-center p-6 bg-background text-background"
   >
     <section
-      class="w-full max-w-105 p-9 border border-[#303030] rounded-[18px] bg-[#191919]"
+      class="w-full max-w-105 p-9 border border-[#303030] rounded-[18px] bg-surface"
     >
-      <RouterLink
-        to="/"
-        class="text-[#a8e66b] text-2xl font-extrabold no-underline"
+      <RouterLink to="/" class="text-brand text-2xl font-extrabold no-underline"
         >Unwrap</RouterLink
       >
 
@@ -84,14 +82,14 @@ const submitLogin = async () => {
           class="box-border w-full p-[13px] border border-[#444] rounded-lg bg-[#101010] text-white"
         />
 
-        <p v-if="error" class="text-[#ff9696]" role="alert">
+        <p v-if="error" class="text-error" role="alert">
           {{ error }}
         </p>
 
         <button
           type="submit"
           :disabled="loading"
-          class="mt-[10px] p-[13px] border-0 rounded-lg bg-[#a8e66b] text-[#111] font-bold cursor-pointer disabled:opacity-60 disabled:cursor-wait"
+          class="mt-[10px] p-[13px] border-0 rounded-lg bg-brand text-[#111] font-bold cursor-pointer disabled:opacity-60 disabled:cursor-wait"
         >
           {{ loading ? "Logging in..." : "Log in" }}
         </button>
@@ -99,9 +97,7 @@ const submitLogin = async () => {
 
       <p class="mt-6 text-sm text-[#aaa] leading-[1.6]">
         Don't have an account?
-        <RouterLink to="/register" class="text-[#a8e66b]"
-          >Create one</RouterLink
-        >
+        <RouterLink to="/register" class="text-brand">Create one</RouterLink>
       </p>
     </section>
   </main>

@@ -72,10 +72,10 @@ const handleSearch = async () => {
 
 <template>
   <section
-    class="w-full p-8 border border-[#303030] rounded-[18px] bg-[#191919] shadow-xl flex flex-col gap-6"
+    class="w-full p-8 border border-[#303030] rounded-[18px] bg-surface shadow-xl flex flex-col gap-6"
   >
     <div>
-      <h2 class="text-xl font-bold tracking-tight mb-2 text-[#f5f5f5]">
+      <h2 class="text-xl font-bold tracking-tight mb-2 text-background">
         Manage Exclusions
       </h2>
       <p class="text-sm text-neutral-400">
@@ -93,7 +93,7 @@ const handleSearch = async () => {
           class="px-4 py-2 rounded-lg text-sm font-semibold transition-all border"
           :class="
             typeToExclude === entity.label
-              ? 'bg-[#a8e66b] text-[#191919] border-[#a8e66b]'
+              ? 'bg-[#a8e66b] text-surface border-[#a8e66b]'
               : 'bg-transparent text-neutral-300 border-[#303030] hover:border-neutral-500'
           "
           @click="setType(entity.label)"
@@ -108,11 +108,11 @@ const handleSearch = async () => {
         v-model="entityName"
         type="text"
         placeholder="Enter artist or track name..."
-        class="flex-1 bg-[#191919] border border-[#303030] rounded-lg px-4 py-3 text-[#f5f5f5] placeholder:text-neutral-500 focus:outline-none focus:border-[#a8e66b]"
+        class="flex-1 bg-surface border border-[#303030] rounded-lg px-4 py-3 text-background placeholder:text-neutral-500 focus:outline-none focus:border-[#a8e66b]"
         @keyup.enter="handleSearch"
       />
       <button
-        class="bg-[#a8e66b] text-[#191919] font-bold px-6 py-3 rounded-lg hover:opacity-90 transition-opacity"
+        class="bg-[#a8e66b] text-surface font-bold px-6 py-3 rounded-lg hover:opacity-90 transition-opacity"
         @click="handleSearch"
       >
         Search
@@ -130,11 +130,11 @@ const handleSearch = async () => {
         <li
           v-for="e in entities"
           :key="e.id"
-          class="flex justify-between items-center p-3 rounded-lg border border-[#303030] bg-[#191919]"
+          class="flex justify-between items-center p-3 rounded-lg border border-[#303030] bg-surface"
         >
-          <span class="font-medium text-[#f5f5f5]">{{ e.name }}</span>
+          <span class="font-medium text-background">{{ e.name }}</span>
           <button
-            class="bg-transparent cursor-pointer text-[#a8e66b] border border-[#a8e66b] px-3 py-1.5 rounded-md text-xs font-semibold hover:bg-[#a8e66b] hover:text-[#191919] transition-all"
+            class="bg-transparent cursor-pointer text-[#a8e66b] border border-[#a8e66b] px-3 py-1.5 rounded-md text-xs font-semibold hover:bg-[#a8e66b] hover:text-surface transition-all"
             :disabled="
               typeToExclude === 'track'
                 ? exclusions?.tracks?.some((t) => t.trackId === e.id)

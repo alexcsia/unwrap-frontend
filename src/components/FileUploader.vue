@@ -87,7 +87,7 @@ const formatFileSize = (bytes: number) => {
     </h2>
 
     <p class="mt-1 text-sm text-gray-500">
-      Upload your Spotify or Last.fm history as a ZIP archive.
+      Upload your Spotify history as a ZIP archive.
     </p>
 
     <div class="mt-5">
@@ -143,7 +143,7 @@ const formatFileSize = (bytes: number) => {
       </p>
     </div>
 
-    <p v-if="error" role="alert" class="mt-3 text-sm text-red-600">
+    <p v-if="error" role="alert" class="mt-3 text-sm text-error">
       {{ error }}
     </p>
 

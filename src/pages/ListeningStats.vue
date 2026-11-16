@@ -124,8 +124,8 @@ computed(() => JSON.stringify(buildParams()));
             class="px-3 py-1.5 rounded-md text-sm font-medium cursor-pointer transition"
             :class="
               mode === m.value
-                ? 'bg-white text-[#191919] shadow-sm'
-                : 'text-neutral-600 hover:text-[#191919]'
+                ? 'bg-white text-surface shadow-sm'
+                : 'text-neutral-600 hover:text-surface'
             "
             @click="mode = m.value"
           >
@@ -137,7 +137,7 @@ computed(() => JSON.stringify(buildParams()));
       <template v-if="mode === 'year'">
         <select
           v-model.number="selectedYear"
-          class="px-3 py-2 rounded-lg border border-neutral-700 bg-[#191919] text-white"
+          class="px-3 py-2 rounded-lg border border-neutral-700 bg-surface text-white"
         >
           <option v-for="y in years" :key="y" :value="y">{{ y }}</option>
         </select>
@@ -146,7 +146,7 @@ computed(() => JSON.stringify(buildParams()));
       <template v-else-if="mode === 'month'">
         <select
           v-model.number="selectedMonth"
-          class="px-3 py-2 rounded-lg border border-neutral-700 bg-[#191919] text-white"
+          class="px-3 py-2 rounded-lg border border-neutral-700 bg-surface text-white"
         >
           <option v-for="(name, i) in MONTHS" :key="i" :value="i + 1">
             {{ name }}
@@ -154,7 +154,7 @@ computed(() => JSON.stringify(buildParams()));
         </select>
         <select
           v-model.number="selectedYear"
-          class="px-3 py-2 rounded-lg border border-neutral-700 bg-[#191919] text-white"
+          class="px-3 py-2 rounded-lg border border-neutral-700 bg-surface text-white"
         >
           <option v-for="y in years" :key="y" :value="y">{{ y }}</option>
         </select>
@@ -179,11 +179,11 @@ computed(() => JSON.stringify(buildParams()));
         />
       </template>
 
-      <h1 class="text-2xl font-bold m-0 text-[#191919]">Listening stats</h1>
+      <h1 class="text-2xl font-bold m-0 text-surface">Listening stats</h1>
 
       <button
         type="button"
-        class="px-3.5 py-2 border border-neutral-700 rounded-lg bg-[#191919] text-white cursor-pointer hover:bg-[#303030] disabled:opacity-50 disabled:cursor-default"
+        class="px-3.5 py-2 border border-neutral-700 rounded-lg bg-surface text-white cursor-pointer hover:bg-[#303030] disabled:opacity-50 disabled:cursor-default"
         @click="loadAll"
       >
         Refresh all
@@ -192,10 +192,10 @@ computed(() => JSON.stringify(buildParams()));
 
     <section>
       <div class="flex items-center justify-between gap-3 mb-3">
-        <h2 class="text-lg font-semibold m-0 text-[#191919]">Time listened</h2>
+        <h2 class="text-lg font-semibold m-0 text-surface">Time listened</h2>
         <button
           type="button"
-          class="px-3.5 py-2 border border-neutral-700 rounded-lg bg-[#191919] text-white cursor-pointer hover:bg-[#303030] disabled:opacity-50 disabled:cursor-default"
+          class="px-3.5 py-2 border border-neutral-700 rounded-lg bg-surface text-white cursor-pointer hover:bg-[#303030] disabled:opacity-50 disabled:cursor-default"
           :disabled="timeLoading"
           @click="loadTimeListened"
         >
@@ -238,7 +238,7 @@ computed(() => JSON.stringify(buildParams()));
       <template #actions>
         <button
           type="button"
-          class="px-3.5 py-2 border border-neutral-700 rounded-lg bg-[#191919] text-white cursor-pointer hover:bg-[#303030] disabled:opacity-50 disabled:cursor-default"
+          class="px-3.5 py-2 border border-neutral-700 rounded-lg bg-surface text-white cursor-pointer hover:bg-[#303030] disabled:opacity-50 disabled:cursor-default"
           :disabled="artistsLoading"
           @click="loadArtists"
         >
@@ -258,7 +258,7 @@ computed(() => JSON.stringify(buildParams()));
       <template #actions>
         <button
           type="button"
-          class="px-3.5 py-2 border border-neutral-700 rounded-lg bg-[#191919] text-white cursor-pointer hover:bg-[#303030] disabled:opacity-50 disabled:cursor-default"
+          class="px-3.5 py-2 border border-neutral-700 rounded-lg bg-surface text-white cursor-pointer hover:bg-[#303030] disabled:opacity-50 disabled:cursor-default"
           :disabled="tracksLoading"
           @click="loadTracks"
         >

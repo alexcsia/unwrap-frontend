@@ -10,9 +10,9 @@ defineProps<{
 
 <template>
   <section
-    class="w-full p-8 border border-[#303030] rounded-[18px] bg-[#191919] shadow-xl"
+    class="w-full p-8 border border-[#303030] rounded-[18px] bg-surface shadow-xl"
   >
-    <h3 class="text-xl font-bold mb-6 text-[#f5f5f5]">
+    <h3 class="text-xl font-bold mb-6 text-background">
       Your Current Exclusions
     </h3>
 
@@ -37,9 +37,9 @@ defineProps<{
           <li
             v-for="artist in exclusions.artists"
             :key="artist.artistId"
-            class="flex justify-between items-center p-3 rounded-lg border border-[#303030] bg-[#191919]"
+            class="flex justify-between items-center p-3 rounded-lg border border-[#303030] bg-surface"
           >
-            <span class="font-medium text-[#f5f5f5]">{{
+            <span class="font-medium text-background">{{
               artist.artistName
             }}</span>
             <button
@@ -62,10 +62,10 @@ defineProps<{
           <li
             v-for="track in exclusions.tracks"
             :key="track.trackId"
-            class="flex justify-between items-center p-3 rounded-lg border border-[#303030] bg-[#191919]"
+            class="flex justify-between items-center p-3 rounded-lg border border-[#303030] bg-surface"
           >
             <div class="flex flex-col">
-              <span class="font-medium text-[#f5f5f5]">{{
+              <span class="font-medium text-background">{{
                 track.trackName
               }}</span>
               <span class="text-xs text-neutral-400"

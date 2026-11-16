@@ -62,7 +62,7 @@ const signOut = async () => {
 <template>
   <div class="relative">
     <button
-      class="px-3.5 py-2.5 border border-[#444] rounded-lg bg-[#191919] text-white cursor-pointer"
+      class="px-3.5 py-2.5 border border-[#444] rounded-lg bg-surface text-white cursor-pointer"
       type="button"
       @click="toggleMenu"
       aria-label="Open profile menu"
@@ -73,7 +73,7 @@ const signOut = async () => {
 
     <div
       v-if="isOpen"
-      class="absolute z-10 top-[calc(100%+8px)] right-0 min-w-[180px] p-2 border border-[#333] rounded-[10px] bg-[#191919] shadow-[0_8px_24px_#0005]"
+      class="absolute z-10 top-[calc(100%+8px)] right-0 min-w-[180px] p-2 border border-[#333] rounded-[10px] bg-surface shadow-[0_8px_24px_#0005]"
     >
       <button
         type="button"
@@ -102,11 +102,7 @@ const signOut = async () => {
         Log out
       </button>
 
-      <p
-        v-if="error"
-        class="px-[10px] text-[#ff9696] text-[0.85rem]"
-        role="alert"
-      >
+      <p v-if="error" class="px-[10px] text-error text-[0.85rem]" role="alert">
         {{ error }}
       </p>
     </div>

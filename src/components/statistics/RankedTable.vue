@@ -22,16 +22,14 @@ function cell(col: RankedColumn, row: any): string {
 </script>
 
 <template>
-  <section
-    class="p-5 border border-[#303030] rounded-xl bg-[#191919] text-white"
-  >
+  <section class="p-5 border border-[#303030] rounded-xl bg-surface text-white">
     <header class="flex items-center justify-between gap-3 mb-3">
       <h2 class="text-lg font-semibold m-0">{{ title }}</h2>
       <slot name="actions" />
     </header>
 
     <p v-if="loading" class="text-neutral-400 m-1">Loading…</p>
-    <p v-else-if="error" class="text-red-300 m-1" role="alert">{{ error }}</p>
+    <p v-else-if="error" class="text-error m-1" role="alert">{{ error }}</p>
     <p v-else-if="rows.length === 0" class="text-neutral-400 m-1">
       {{ emptyMessage ?? "No data yet." }}
     </p>
