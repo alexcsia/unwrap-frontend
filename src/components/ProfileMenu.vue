@@ -28,13 +28,12 @@ const openProfile = async () => {
   }
 };
 
-const connectSpotify = async () => {
+const openPlatforms = async () => {
   loading.value = true;
   error.value = null;
 
   try {
-    // const result = await linkPlatform("spotify");
-    // window.location.href = result.redirectUrl;
+    await router.replace("/platforms");
   } catch (err) {
     console.error(err);
     error.value = "Could not start platform connection.";
@@ -88,9 +87,9 @@ const signOut = async () => {
         type="button"
         class="block w-full p-[11px] border-0 rounded-md bg-transparent text-white text-left cursor-pointer hover:bg-[#303030] disabled:opacity-50"
         :disabled="loading"
-        @click="connectSpotify"
+        @click="openPlatforms"
       >
-        Link platform
+        Platforms
       </button>
 
       <button
