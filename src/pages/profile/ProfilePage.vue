@@ -1,55 +1,101 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import ProfileField from "@/components/profile/ProfileField.vue";
 import { useProfile } from "@/composables/profile/useProfile";
+import { useRouter } from "vue-router";
+import { toast } from "vue-sonner";
 
-const { data: profile, isLoading, isError } = useProfile();
+const router = useRouter();
+const {
+  data: profile,
+  isLoading,
+  isError,
+  updateProfile,
+  changePassword,
+  deleteAccount,
+  isDeleting,
+} = useProfile();
 
-const username = ref("YourUsername");
-const email = ref("you@example.com");
+const username = ref("");
+const email = ref("");
+
+watch(
+  profile,
+  (p) => {
+    if (p) {
+      username.value = p.name ?? "";
+      email.value = p.email ?? "";
+    }
+  },
+  { immediate: true },
+);
 
 const changingPassword = ref(false);
 const currentPassword = ref("");
 const newPassword = ref("");
 const confirmPassword = ref("");
 
-const isDeleting = ref(false);
-
 async function updateUsername(value: string) {
-  username.value = value;
+  try {
+    await updateProfile({ name: value });
+    toast.success("Username updated successfully.");
+  } catch (err) {
+    console.error(err);
+    toast.error("Failed to update username.");
+  }
 }
 
 async function updateEmail(value: string) {
-  email.value = value;
+  try {
+    await updateProfile({ email: value });
+    toast.success("Email address updated successfully.");
+  } catch (err) {
+    console.error(err);
+    toast.error("Failed to update email address.");
+  }
 }
 
-async function changePassword() {
+async function handlePasswordChange() {
   if (newPassword.value !== confirmPassword.value) {
+    toast.error("New passwords do not match.");
     return;
   }
 
   if (newPassword.value.length < 8) {
+    toast.error("New password must be at least 8 characters long.");
     return;
   }
 
-  currentPassword.value = "";
-  newPassword.value = "";
-  confirmPassword.value = "";
-  changingPassword.value = false;
+  try {
+    await changePassword({
+      currentPassword: currentPassword.value,
+      newPassword: newPassword.value,
+    });
+    toast.success("Password changed successfully.");
+    currentPassword.value = "";
+    newPassword.value = "";
+    confirmPassword.value = "";
+    changingPassword.value = false;
+  } catch (err) {
+    console.error(err);
+    toast.error("Failed to change password. Check your current password.");
+  }
 }
 
-async function deleteAccount() {
+async function handleDeleteAccount() {
   const confirmed = window.confirm(
     "Are you sure you want to delete your account? This action cannot be undone.",
   );
 
   if (!confirmed) return;
 
-  isDeleting.value = true;
-
   try {
-  } finally {
-    isDeleting.value = false;
+    await deleteAccount();
+    toast.success("Account deleted.");
+    await router.replace("/login");
+  } catch (err) {
+    console.error(err);
+    toast.error("Could not delete account. Please try again.");
   }
 }
 </script>
@@ -121,7 +167,7 @@ async function deleteAccount() {
         <form
           v-if="changingPassword"
           class="mt-5 space-y-4"
-          @submit.prevent="changePassword"
+          @submit.prevent="handlePasswordChange"
         >
           <div>
             <label
@@ -195,7 +241,7 @@ async function deleteAccount() {
       <section
         class="mt-6 rounded-2xl border border-red-400/20 bg-surface p-6 sm:p-8"
       >
-        <h2 class="text-lg font-semibold text-red-400">Danger zone</h2>
+        <h2 class="text-lg font-semibold text-error">Danger zone</h2>
 
         <div
           class="mt-3 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
@@ -210,8 +256,8 @@ async function deleteAccount() {
           <button
             type="button"
             :disabled="isDeleting"
-            class="shrink-0 rounded-lg border border-red-400/40 px-4 py-2 text-sm font-semibold text-red-400 transition hover:bg-red-400/10 disabled:cursor-not-allowed disabled:opacity-50"
-            @click="deleteAccount"
+            class="shrink-0 rounded-lg border border-red-400/40 px-4 py-2 text-sm font-semibold text-error transition hover:bg-red-400/10 disabled:cursor-not-allowed disabled:opacity-50"
+            @click="handleDeleteAccount"
           >
             {{ isDeleting ? "Deleting..." : "Delete account" }}
           </button>
