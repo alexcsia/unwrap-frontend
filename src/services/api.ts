@@ -7,7 +7,7 @@ import type {
 } from "./types/statistics";
 import type { AuthResponse, UserProfile } from "./types/auth";
 
-const API_URL = import.meta.env.API_URL;
+const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 export class ApiError extends Error {
   public status: number;
@@ -19,7 +19,7 @@ export class ApiError extends Error {
 }
 
 export const api = axios.create({
-  baseURL: API_URL,
+  baseURL: VITE_API_URL,
   withCredentials: true,
   headers: { "X-Requested-With": "XMLHttpRequest" },
 });
