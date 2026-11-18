@@ -7,6 +7,7 @@ import type { PlatformName } from "@/services/api";
 import PlatformCard from "@/components/platforms/PlatformCard.vue";
 import ConnectionCard from "@/components/platforms/ConnectionCard.vue";
 import { usePlatformCallback } from "@/composables/platforms/usePlatformCallback";
+import Navbar from "@/components/Navbar.vue";
 
 const { get, isPending, isError } = usePlatforms();
 const { connect, disconnect } = usePlatformActions();
@@ -47,7 +48,7 @@ function onDisconnect(name: PlatformName, label: string) {
 
 <template>
   <main class="flex min-h-screen w-full flex-col bg-neutral-950 text-white">
-    <h1 class="text-2xl font-bold">Your platforms</h1>
+    <Navbar />
 
     <p v-if="connect.isError.value" role="alert">
       Could not start the connection.
