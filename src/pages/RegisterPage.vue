@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { register, ApiError } from "@/services/api";
+import Navbar from "@/components/Navbar.vue";
 
 const name = ref("");
 const email = ref("");
@@ -50,6 +51,7 @@ const submitRegister = async () => {
 </script>
 
 <template>
+  <Navbar />
   <main
     class="min-h-screen grid place-items-center p-4 bg-background text-background"
   >
