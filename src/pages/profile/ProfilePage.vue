@@ -149,11 +149,6 @@ async function handleDeleteAccount() {
         <div
           class="flex flex-col gap-3 border-b border-white/10 py-5 sm:flex-row sm:items-center sm:justify-between"
         >
-          <div>
-            <p class="mb-1 text-sm font-medium text-white/50">Password</p>
-            <p class="text-base tracking-widest text-white">*************</p>
-          </div>
-
           <button
             v-if="!changingPassword"
             type="button"
