@@ -7,6 +7,7 @@ import StatisticsPage from "@/pages/ListeningStats.vue";
 import Platforms from "@/pages/Platforms.vue";
 import { useAuthStore } from "@/stores/auth";
 import FileUploadPage from "@/pages/FileUploadPage.vue";
+import ProfilePage from "@/pages/profile/ProfilePage.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -52,6 +53,12 @@ const router = createRouter({
       path: "/history-upload",
       name: "upload",
       component: FileUploadPage,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/profile",
+      name: "profile",
+      component: ProfilePage,
       meta: { requiresAuth: true },
     },
   ],
