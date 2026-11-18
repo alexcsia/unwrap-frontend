@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ProfileMenu from "./ProfileMenu.vue";
+import NavbarMenu from "./NavbarMenu.vue";
 </script>
 
 <template>
@@ -14,7 +14,7 @@ import ProfileMenu from "./ProfileMenu.vue";
         Unwrap
       </RouterLink>
 
-      <ProfileMenu />
+      <NavbarMenu />
     </nav>
   </header>
 </template>
