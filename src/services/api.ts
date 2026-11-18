@@ -169,3 +169,24 @@ export const deleteExclusion = (params: exclusionsPayload) =>
       message: string;
     }>(`/api/exclusions/${params.type}/${params.targetId}`)
     .then((r) => r.data);
+
+export interface UpdateProfilePayload {
+  name?: string;
+  email?: string;
+}
+
+export interface ChangePasswordPayload {
+  currentPassword: string;
+  newPassword: string;
+}
+
+export const updateProfile = (payload: UpdateProfilePayload) =>
+  api.patch<UserProfile>("/user/profile", payload).then((r) => r.data);
+
+export const changePassword = (payload: ChangePasswordPayload) =>
+  api
+    .post<{ message: string }>("/auth/change-password", payload)
+    .then((r) => r.data);
+
+export const deleteAccount = () =>
+  api.delete<{ message: string }>("/user/account").then((r) => r.data);
