@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { logout } from "@/services/api";
 import { useQueryClient } from "@tanstack/vue-query";
+import { useAuthStore } from "@/stores/auth";
 
+const authStore = useAuthStore();
 const isOpen = ref(false);
 const loading = ref(false);
 const error = ref<string | null>(null);
@@ -27,6 +28,7 @@ const openProfile = async () => {
 
 const openPlatforms = async () => {
   try {
+    isOpen.value = false;
     await router.replace("/platforms");
   } catch (err) {
     console.error(err);
@@ -39,7 +41,7 @@ const signOut = async () => {
   error.value = null;
 
   try {
-    await logout();
+    await authStore.logout();
     queryClient.clear();
     isOpen.value = false;
     await router.replace("/login");
@@ -86,14 +88,16 @@ const signOut = async () => {
         Platforms
       </button>
 
-      <button
-        type="button"
-        class="block w-full p-[11px] border-0 rounded-md bg-transparent text-white text-left cursor-pointer hover:bg-[#303030] disabled:opacity-50"
-        :disabled="loading"
-        @click="signOut"
-      >
-        Log out
-      </button>
+      <div v-if="authStore.user">
+        <button
+          type="button"
+          class="block w-full p-[11px] border-0 rounded-md bg-transparent text-white text-left cursor-pointer hover:bg-[#303030] disabled:opacity-50"
+          :disabled="loading"
+          @click="signOut"
+        >
+          Log out {{ authStore.user }}
+        </button>
+      </div>
 
       <p v-if="error" class="px-[10px] text-error text-[0.85rem]" role="alert">
         {{ error }}

@@ -54,7 +54,6 @@ export const useAuthStore = defineStore("auth", () => {
       await apiLogout();
     } finally {
       clearUser();
-      window.location.href = "/login";
     }
   }
 

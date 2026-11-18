@@ -70,7 +70,7 @@ export const register = (
     .post<AuthResponse>("/register", { displayName, email, password })
     .then((r) => r.data);
 
-export const logout = () => api.post<void>("/auth/logout").then((r) => r.data);
+export const logout = () => api.get<void>("/auth/logout").then((r) => r.data);
 
 export const getProfile = () =>
   api.get<UserProfile>("/user/profile").then((r) => r.data);
