@@ -80,20 +80,18 @@ const formatFileSize = (bytes: number) => {
 
 <template>
   <section
-    class="w-full max-w-xl rounded-xl border border-gray-200 bg-white p-6"
+    class="w-full max-w-xl rounded-xl border border-gray-200 bg-surface p-6"
   >
-    <h2 class="text-lg font-semibold text-gray-900">
-      Upload listening history
-    </h2>
+    <h2 class="text-lg font-semibold text-brand">Upload listening history</h2>
 
-    <p class="mt-1 text-sm text-gray-500">
+    <p class="mt-1 text-sm text-gray-200">
       Upload your Spotify history as a ZIP archive.
     </p>
 
     <div class="mt-5">
       <label
         for="platform"
-        class="mb-2 block text-sm font-medium text-gray-700"
+        class="mb-2 block text-sm font-medium text-gray-200"
       >
         Platform
       </label>
@@ -101,7 +99,7 @@ const formatFileSize = (bytes: number) => {
       <select
         id="platform"
         v-model="selectedPlatform"
-        class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+        class="w-full rounded-lg border cursor-pointer border-gray-300 bg-white px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
       >
         <option
           v-for="platform in SUPPORTED_PLATFORMS"
@@ -116,7 +114,7 @@ const formatFileSize = (bytes: number) => {
     <div class="mt-5">
       <label
         for="history-file"
-        class="mb-2 block text-sm font-medium text-gray-700"
+        class="mb-2 block text-sm font-medium text-gray-200"
       >
         ZIP archive
       </label>
@@ -126,10 +124,10 @@ const formatFileSize = (bytes: number) => {
         type="file"
         accept=".zip,application/zip"
         @change="handleFileChange"
-        class="block w-full cursor-pointer rounded-lg border border-gray-300 text-sm text-gray-600 file:mr-4 file:border-0 file:bg-gray-100 file:px-4 file:py-3 file:text-sm file:font-medium file:text-gray-700 hover:file:bg-gray-200"
+        class="block w-full cursor-pointer rounded-lg border border-gray-700 text-sm text-gray-200 file:mr-4 file:border-0 file:bg-brand file:px-4 file:py-3 file:text-sm file:font-medium file:text-gray-800"
       />
 
-      <p class="mt-2 text-xs text-gray-500">
+      <p class="mt-2 text-xs text-gray-300">
         ZIP files only. Maximum size: 50 MB.
       </p>
     </div>
@@ -151,7 +149,7 @@ const formatFileSize = (bytes: number) => {
       type="button"
       :disabled="!selectedFile || isUploading"
       @click="handleUpload"
-      class="mt-5 w-full rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-gray-300"
+      class="mt-5 w-full rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-indigo-700 cursor-pointer disabled:cursor-not-allowed disabled:bg-gray-300"
     >
       {{ isUploading ? "Uploading..." : "Upload history" }}
     </button>
