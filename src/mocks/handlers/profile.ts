@@ -2,7 +2,7 @@ import { http, HttpResponse, delay } from "msw";
 import { db } from "../db";
 import type { UserProfile } from "@/services/types/auth";
 
-const API = import.meta.env.VITE_API_URL;
+const API = import.meta.env.API_URL;
 
 export const profileHandlers = [
   http.get(`${API}/user/profile`, async () => {

@@ -1,7 +1,7 @@
 import { http, HttpResponse, delay } from "msw";
 import { generateTopArtists, generateTopTracks, paginate } from "../fixtures";
 
-const API = import.meta.env.VITE_API_URL;
+const API = import.meta.env.API_URL;
 
 export const statisticsHandlers = [
   http.get(`${API}/api/top-artists`, async ({ request }) => {

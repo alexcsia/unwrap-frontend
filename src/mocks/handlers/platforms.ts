@@ -1,7 +1,7 @@
 import { http, HttpResponse, delay } from "msw";
 import { db } from "../db";
 
-const API = import.meta.env.VITE_API_URL;
+const API = import.meta.env.API_URL;
 
 export const platformHandlers = [
   http.get(`${API}/platforms/`, async () => {

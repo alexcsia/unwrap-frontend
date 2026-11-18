@@ -2,7 +2,7 @@ import { http, HttpResponse, delay } from "msw";
 import { db } from "../db";
 import { SEARCH_ARTISTS, SEARCH_TRACKS } from "../fixtures";
 
-const API = import.meta.env.VITE_API_URL;
+const API = import.meta.env.API_URL;
 
 export const exclusionHandlers = [
   http.get(`${API}/api/exclusions`, async () => {

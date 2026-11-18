@@ -2,7 +2,7 @@ import { http, HttpResponse, delay } from "msw";
 import type { PlatformName } from "@/services/api";
 import { db, persist } from "../db";
 
-const API = import.meta.env.VITE_API_URL;
+const API = import.meta.env.API_URL;
 const LATENCY = 120;
 
 export const authHandlers = [

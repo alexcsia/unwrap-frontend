@@ -1,7 +1,7 @@
 import { http, HttpResponse, delay } from "msw";
 import { SEARCH_ARTISTS, SEARCH_TRACKS } from "../fixtures";
 
-const API = import.meta.env.VITE_API_URL;
+const API = import.meta.env.API_URL;
 
 export const searchHandlers = [
   http.get(`${API}/api/history/search`, async ({ request }) => {
