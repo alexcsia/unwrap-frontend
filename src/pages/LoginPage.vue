@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { login, ApiError } from "@/services/api";
+import { ApiError } from "@/services/api";
 import Navbar from "@/components/Navbar.vue";
+import { useAuthStore } from "@/stores/auth";
 
+const authStore = useAuthStore();
 const email = ref("");
 const password = ref("");
 const loading = ref(false);
@@ -23,8 +25,7 @@ const submitLogin = async () => {
   loading.value = true;
 
   try {
-    await login(email.value.trim(), password.value);
-
+    await authStore.login(email.value.trim(), password.value);
     const redirect =
       typeof route.query.redirect === "string" ? route.query.redirect : "/";
 
