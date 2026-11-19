@@ -6,6 +6,9 @@ import type {
   TimeListenedResponse,
 } from "./types/statistics";
 import type { AuthResponse, UserProfile } from "./types/auth";
+import { useAuthStore } from "@/stores/auth";
+import { useRouter } from "vue-router";
+const router = useRouter();
 
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
@@ -25,7 +28,6 @@ export const api = axios.create({
 });
 
 let refreshPromise: Promise<unknown> | null = null;
-
 api.interceptors.response.use(
   (res) => res,
   async (error) => {
@@ -45,11 +47,23 @@ api.interceptors.response.use(
 
       try {
         await refreshPromise;
+        return api(original);
       } catch {
-        window.location.href = "/login";
+        const auth = useAuthStore();
+
+        auth.clearUser();
+
+        if (router.currentRoute.value.name !== "login") {
+          await router.replace({
+            name: "login",
+            query: {
+              redirect: router.currentRoute.value.fullPath,
+            },
+          });
+        }
+
         return Promise.reject(error);
       }
-      return api(original);
     }
 
     return Promise.reject(error);
@@ -171,7 +185,7 @@ export const deleteExclusion = (params: exclusionsPayload) =>
     .then((r) => r.data);
 
 export interface UpdateProfilePayload {
-  name?: string;
+  username?: string;
   email?: string;
 }
 
