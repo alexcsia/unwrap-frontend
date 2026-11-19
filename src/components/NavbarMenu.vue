@@ -36,6 +36,11 @@ const openPlatforms = async () => {
   }
 };
 
+const handleLogin = async () => {
+  isOpen.value = false;
+  await router.replace("/login");
+};
+
 const signOut = async () => {
   loading.value = true;
   error.value = null;
@@ -70,32 +75,47 @@ const signOut = async () => {
       v-if="isOpen"
       class="absolute z-10 top-[calc(100%+8px)] right-0 min-w-[180px] p-2 border border-[#333] rounded-[10px] bg-surface shadow-[0_8px_24px_#0005]"
     >
-      <button
-        type="button"
-        class="block w-full p-[11px] border-0 rounded-md bg-transparent text-white text-left cursor-pointer hover:bg-[#303030] disabled:opacity-50"
-        :disabled="loading"
-        @click="openProfile"
-      >
-        Profile
-      </button>
+      <div v-if="authStore.isAuthenticated">
+        <button
+          type="button"
+          class="block w-full p-[11px] border-0 rounded-md bg-transparent text-white text-left cursor-pointer hover:bg-[#303030] disabled:opacity-50"
+          :disabled="loading"
+          @click="openProfile"
+        >
+          Profile
+        </button>
+      </div>
 
-      <button
-        type="button"
-        class="block w-full p-[11px] border-0 rounded-md bg-transparent text-white text-left cursor-pointer hover:bg-[#303030] disabled:opacity-50"
-        :disabled="loading"
-        @click="openPlatforms"
-      >
-        Platforms
-      </button>
+      <div v-if="!authStore.isAuthenticated">
+        <button
+          type="button"
+          class="block w-full p-[11px] border-0 rounded-md bg-transparent text-white text-left cursor-pointer hover:bg-[#303030] disabled:opacity-50"
+          :disabled="loading"
+          @click="handleLogin"
+        >
+          Login
+        </button>
+      </div>
 
-      <div v-if="authStore.user">
+      <div v-if="authStore.isAuthenticated">
+        <button
+          type="button"
+          class="block w-full p-[11px] border-0 rounded-md bg-transparent text-white text-left cursor-pointer hover:bg-[#303030] disabled:opacity-50"
+          :disabled="loading"
+          @click="openPlatforms"
+        >
+          Platforms
+        </button>
+      </div>
+
+      <div v-if="authStore.isAuthenticated">
         <button
           type="button"
           class="block w-full p-[11px] border-0 rounded-md bg-transparent text-white text-left cursor-pointer hover:bg-[#303030] disabled:opacity-50"
           :disabled="loading"
           @click="signOut"
         >
-          Log out {{ authStore.user }}
+          Log out {{ authStore.isAuthenticated }}
         </button>
       </div>
 
