@@ -4,6 +4,7 @@ import {
   getPlatforms,
   connectPlatform,
   disconnectPlatform,
+  ApiError,
   type PlatformName,
 } from "@/services/api";
 import { toast } from "vue-sonner";
@@ -33,6 +34,14 @@ export function usePlatformActions() {
     onSuccess: (url) => {
       window.location.href = url;
     },
+    onError: (err) => {
+      console.error(err);
+      if (err instanceof ApiError) {
+        toast.error(err.message);
+      } else {
+        toast.error("Could not connect platform.");
+      }
+    },
   });
 
   const disconnect = useMutation({
@@ -41,8 +50,13 @@ export function usePlatformActions() {
       toast.success("Platform disconnected successfully!");
       qc.invalidateQueries({ queryKey: KEY });
     },
-    onError: () => {
-      toast.error("Could not disconnect platform.");
+    onError: (err) => {
+      console.error(err);
+      if (err instanceof ApiError) {
+        toast.error(err.message);
+      } else {
+        toast.error("Could not disconnect platform.");
+      }
     },
   });
 

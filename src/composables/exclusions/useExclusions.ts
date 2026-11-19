@@ -2,6 +2,7 @@ import {
   createExclusion,
   fetchExclusions,
   deleteExclusion,
+  ApiError,
   type Exclusions,
 } from "@/services/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
@@ -37,8 +38,13 @@ export function useExclusionsActions() {
 
       await qc.refetchQueries({ queryKey: KEY });
     },
-    onError: () => {
-      toast.error("Could not create exclusion");
+    onError: (err) => {
+      console.error(err);
+      if (err instanceof ApiError) {
+        toast.error(err.message);
+      } else {
+        toast.error("Could not create exclusion");
+      }
     },
   });
 
@@ -48,7 +54,14 @@ export function useExclusionsActions() {
       toast.success("Exclusion deleted!");
       await qc.refetchQueries({ queryKey: KEY });
     },
-    onError: () => toast.error("Could not delete exclusion"),
+    onError: (err) => {
+      console.error(err);
+      if (err instanceof ApiError) {
+        toast.error(err.message);
+      } else {
+        toast.error("Could not delete exclusion");
+      }
+    },
   });
 
   return { add, remove };

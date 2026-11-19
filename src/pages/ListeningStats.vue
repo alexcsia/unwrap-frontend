@@ -4,7 +4,12 @@ import StatCard from "@/components/statistics/StatCard.vue";
 import RankedTable, {
   type RankedColumn,
 } from "@/components/statistics/RankedTable.vue";
-import { getTopArtists, getTopTracks, getTimeListened } from "@/services/api";
+import {
+  getTopArtists,
+  getTopTracks,
+  getTimeListened,
+  ApiError,
+} from "@/services/api";
 import type {
   TopArtist,
   TopTrack,
@@ -37,8 +42,8 @@ async function loadArtists() {
     const res = await getTopArtists(buildParams());
     artists.value = res.topArtists;
   } catch (e) {
-    console.error(e);
-    artistsError.value = "Could not load top artists.";
+    artistsError.value =
+      e instanceof ApiError ? e.message : "Could not load top artists.";
   } finally {
     artistsLoading.value = false;
   }
@@ -67,7 +72,8 @@ async function loadTracks() {
     tracks.value = res.topTracks;
   } catch (e) {
     console.error(e);
-    tracksError.value = "Could not load top tracks.";
+    tracksError.value =
+      e instanceof ApiError ? e.message : "Could not load top tracks.";
   } finally {
     tracksLoading.value = false;
   }
@@ -96,8 +102,8 @@ async function loadTimeListened() {
   try {
     time.value = await getTimeListened(buildParams());
   } catch (e) {
-    console.error(e);
-    timeError.value = "Could not load listening time.";
+    timeError.value =
+      e instanceof ApiError ? e.message : "Could not load listening time.";
   } finally {
     timeLoading.value = false;
   }

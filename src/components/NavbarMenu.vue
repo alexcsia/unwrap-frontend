@@ -3,6 +3,7 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useQueryClient } from "@tanstack/vue-query";
 import { useAuthStore } from "@/stores/auth";
+import { ApiError } from "@/services/api";
 
 const authStore = useAuthStore();
 const isOpen = ref(false);
@@ -22,7 +23,8 @@ const openProfile = async () => {
     await router.push({ name: "profile" });
   } catch (err) {
     console.error(err);
-    error.value = "Could not load your profile.";
+    error.value =
+      err instanceof ApiError ? err.message : "Could not load your profile.";
   }
 };
 
@@ -32,7 +34,8 @@ const openPlatforms = async () => {
     await router.replace("/platforms");
   } catch (err) {
     console.error(err);
-    error.value = "Could not open platforms.";
+    error.value =
+      err instanceof ApiError ? err.message : "Could not open platforms.";
   }
 };
 
@@ -52,13 +55,15 @@ const signOut = async () => {
     await router.replace("/login");
   } catch (err) {
     console.error(err);
-    error.value = "Could not log out. Please try again.";
+    error.value =
+      err instanceof ApiError
+        ? err.message
+        : "Could not log out. Please try again.";
   } finally {
     loading.value = false;
   }
 };
 </script>
-
 <template>
   <div class="relative">
     <button

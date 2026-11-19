@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { getProfile, logout } from "@/services/api";
+import { ApiError, getProfile, logout } from "@/services/api";
 
 const isOpen = ref(false);
 const loading = ref(false);
@@ -22,7 +22,8 @@ const openProfile = async () => {
     console.log("Profile:", profile);
   } catch (err) {
     console.error(err);
-    error.value = "Could not load your profile.";
+    error.value =
+      err instanceof ApiError ? err.message : "Could not load your profile.";
   } finally {
     loading.value = false;
   }
@@ -36,7 +37,10 @@ const openPlatforms = async () => {
     await router.replace("/platforms");
   } catch (err) {
     console.error(err);
-    error.value = "Could not start platform connection.";
+    error.value =
+      err instanceof ApiError
+        ? err.message
+        : "Could not start platform connection.";
     loading.value = false;
   }
 };
@@ -51,7 +55,10 @@ const signOut = async () => {
     await router.replace("/login");
   } catch (err) {
     console.error(err);
-    error.value = "Could not log out. Please try again.";
+    error.value =
+      err instanceof ApiError
+        ? err.message
+        : "Could not log out. Please try again.";
   } finally {
     loading.value = false;
   }

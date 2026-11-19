@@ -5,6 +5,7 @@ import { useProfile } from "@/composables/profile/useProfile";
 import { useRouter } from "vue-router";
 import { toast } from "vue-sonner";
 import Navbar from "@/components/Navbar.vue";
+import { ApiError } from "@/services/api";
 
 const router = useRouter();
 const {
@@ -41,8 +42,11 @@ async function updateUsername(value: string) {
     await updateProfile({ username: value, email: email.value });
     toast.success("Username updated successfully.");
   } catch (err) {
-    console.error(err);
-    toast.error("Failed to update username.");
+    if (err instanceof ApiError) {
+      toast.error(err.message);
+    } else {
+      toast.error("Something went wrong.");
+    }
   }
 }
 
@@ -51,8 +55,11 @@ async function updateEmail(value: string) {
     await updateProfile({ username: username.value, email: value });
     toast.success("Email address updated successfully.");
   } catch (err) {
-    console.error(err);
-    toast.error("Failed to update email address.");
+    if (err instanceof ApiError) {
+      toast.error(err.message);
+    } else {
+      toast.error("Something went wrong.");
+    }
   }
 }
 
@@ -79,7 +86,11 @@ async function handlePasswordChange() {
     changingPassword.value = false;
   } catch (err) {
     console.error(err);
-    toast.error("Failed to change password. Check your current password.");
+    if (err instanceof ApiError) {
+      toast.error(err.message);
+    } else {
+      toast.error("Failed to change password. Check your current password.");
+    }
   }
 }
 
@@ -96,7 +107,11 @@ async function handleDeleteAccount() {
     await router.replace("/login");
   } catch (err) {
     console.error(err);
-    toast.error("Could not delete account. Please try again.");
+    if (err instanceof ApiError) {
+      toast.error(err.message);
+    } else {
+      toast.error("Could not delete account. Please try again.");
+    }
   }
 }
 </script>

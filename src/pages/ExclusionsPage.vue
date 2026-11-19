@@ -6,6 +6,8 @@ import {
   useExclusions,
   useExclusionsActions,
 } from "@/composables/exclusions/useExclusions";
+import { ApiError } from "@/services/api";
+import { toast } from "vue-sonner";
 
 const { exclusions, isPending } = useExclusions();
 const { add, remove } = useExclusionsActions();
@@ -14,26 +16,44 @@ const handleAddExclusion = async (
   targetId: string,
   type: "track" | "artist",
 ) => {
-  if (type === "track") {
-    const ids = exclusions.value.tracks.map((t) => t.trackId);
-    if (ids.includes(targetId)) {
-      return;
-    } else {
-      await add.mutateAsync({ targetId, type });
+  try {
+    if (type === "track") {
+      const ids = exclusions.value.tracks.map((t) => t.trackId);
+      if (ids.includes(targetId)) {
+        return;
+      } else {
+        await add.mutateAsync({ targetId, type });
+        console.log("excluding");
+      }
+    }
+    if (type === "artist") {
+      const ids = exclusions.value.artists.map((t) => t.artistId);
+      if (ids.includes(targetId)) {
+        return;
+      } else await add.mutateAsync({ targetId, type });
       console.log("excluding");
     }
-  }
-  if (type === "artist") {
-    const ids = exclusions.value.artists.map((t) => t.artistId);
-    if (ids.includes(targetId)) {
-      return;
-    } else await add.mutateAsync({ targetId, type });
-    console.log("excluding");
+  } catch (err) {
+    console.error(err);
+    if (err instanceof ApiError) {
+      toast.error(err.message);
+    } else {
+      toast.error("Could not add exclusion.");
+    }
   }
 };
 
 const handleDeletion = async (targetId: string, type: "artist" | "track") => {
-  await remove.mutateAsync({ targetId, type });
+  try {
+    await remove.mutateAsync({ targetId, type });
+  } catch (err) {
+    console.error(err);
+    if (err instanceof ApiError) {
+      toast.error(err.message);
+    } else {
+      toast.error("Could not remove exclusion.");
+    }
+  }
 };
 </script>
 

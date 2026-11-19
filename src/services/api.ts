@@ -7,16 +7,18 @@ import type {
 } from "./types/statistics";
 import type { UserProfile } from "./types/auth";
 import { useAuthStore } from "@/stores/auth";
-import { useRouter } from "vue-router";
-const router = useRouter();
+
+import router from "@/router";
 
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 export class ApiError extends Error {
   public status: number;
-  constructor(status: number, message: string) {
+  public code: string;
+  constructor(status: number, message: string, code: string) {
     super(message);
     this.status = status;
+    this.code = code;
     this.name = "ApiError";
   }
 }
@@ -50,23 +52,26 @@ api.interceptors.response.use(
         return api(original);
       } catch {
         const auth = useAuthStore();
-
         auth.clearUser();
 
         if (router.currentRoute.value.name !== "login") {
-          await router.replace({
-            name: "login",
-            query: {
-              redirect: router.currentRoute.value.fullPath,
-            },
-          });
+          await router.replace({ name: "login" });
         }
 
-        return Promise.reject(error);
+        return Promise.reject(
+          new ApiError(401, "Your session has expired.", "SESSION_EXPIRED"),
+        );
       }
     }
 
-    return Promise.reject(error);
+    const status = error.response?.status ?? 0;
+    const message =
+      error.response?.data?.message ??
+      (error.response ? "Something went wrong." : "Network error.");
+
+    return Promise.reject(
+      new ApiError(status, message, error.response?.data?.code),
+    );
   },
 );
 
