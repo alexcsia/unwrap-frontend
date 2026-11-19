@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import FileUploader from "@/components/FileUploader.vue";
+import FileUploader from "@/components/fileUpload/FileUploader.vue";
 import axios from "axios";
 
 const uploadHistory = async ({
