@@ -13,28 +13,28 @@ export const useAuthStore = defineStore("auth", () => {
   const isInitialized = ref(false);
 
   const isAuthenticated = computed(() => !!user.value);
-
   async function fetchUser() {
     if (isInitialized.value) return;
 
-    if (import.meta.env.DEV) {
-      const profile = { id: "1234 ", email: " test@test.com", name: "test" };
-      user.value = profile;
-    } else {
-      try {
-        const profile = await getProfile();
-        user.value = profile;
-      } catch {
-        user.value = null;
-      } finally {
-        isInitialized.value = true;
+    try {
+      if (import.meta.env.DEV) {
+        user.value = {
+          email: "test@test.com",
+          username: "test",
+        };
+      } else {
+        user.value = await getProfile();
       }
+    } catch {
+      user.value = null;
+    } finally {
+      isInitialized.value = true;
     }
   }
 
   function clearUser() {
     user.value = null;
-    isInitialized.value = false;
+    isInitialized.value = true;
   }
 
   async function login(email: string, pass: string) {
