@@ -28,7 +28,7 @@ export const authHandlers = [
       email: string;
       password: string;
     };
-    db.user = { id: `user_${Date.now()}`, email, name: displayName };
+    db.user = { email, username: displayName };
     db.password = password;
     return HttpResponse.json({ user: db.user });
   }),

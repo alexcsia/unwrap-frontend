@@ -11,7 +11,7 @@ export interface MockDb {
 const STORAGE_KEY = "__mock_db_v1__";
 
 const defaults = (): MockDb => ({
-  user: { id: "1", name: "Demo User", email: "demo@example.com" },
+  user: { username: "Demo User", email: "demo@example.com" },
   password: "password123",
   platforms: [],
   exclusions: { artists: [], tracks: [] },
