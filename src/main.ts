@@ -6,7 +6,7 @@ import { createPinia } from "pinia";
 import { QueryClient, VueQueryPlugin } from "@tanstack/vue-query";
 
 async function enableMocking() {
-  if (import.meta.env.USE_MOCKS !== "true") return;
+  if (import.meta.env.VITE_USE_MOCKS !== "true") return;
   const { worker } = await import("./mocks/browser");
   return worker.start({ onUnhandledFrame: "bypass" });
 }
