@@ -33,7 +33,8 @@ export const authHandlers = [
     return HttpResponse.json({ user: db.user });
   }),
 
-  http.post(`${API}/auth/logout`, async () => {
+  http.get(`${API}/auth/logout`, async () => {
+    console.log("logging out");
     await delay(LATENCY);
     return new HttpResponse(null, { status: 204 });
   }),
