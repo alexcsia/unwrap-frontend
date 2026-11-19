@@ -1,10 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
-import ExclusionsPage from "@/pages/ExclusionsPage.vue";
-import LoginPage from "@/pages/LoginPage.vue";
-import RegisterPage from "@/pages/RegisterPage.vue";
-import DashboardPage from "@/pages/DashboardPage.vue";
-import StatisticsPage from "@/pages/ListeningStats.vue";
-import Platforms from "@/pages/Platforms.vue";
+import ExclusionsPage from "@/pages/exclusions/ExclusionsPage.vue";
+import RegisterPage from "@/pages/register/RegisterPage.vue";
+import LoginPage from "@/pages/login/LoginPage.vue";
+import DashboardPage from "@/pages/dashboard/DashboardPage.vue";
+import ListeningStats from "@/pages/statistics/ListeningStats.vue";
+import Platforms from "@/pages/platforms/Platforms.vue";
 import { useAuthStore } from "@/stores/auth";
 import FileUploadPage from "@/pages/FileUploadPage.vue";
 import ProfilePage from "@/pages/profile/ProfilePage.vue";
@@ -34,7 +34,7 @@ const router = createRouter({
     {
       path: "/statistics",
       name: "statistics",
-      component: StatisticsPage,
+      component: ListeningStats,
       meta: { requiresAuth: true },
     },
     {

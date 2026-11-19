@@ -1,0 +1,125 @@
+<script setup lang="ts">
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { register, ApiError } from "@/services/api";
+import Navbar from "@/components/navbar/Navbar.vue";
+
+const name = ref("");
+const email = ref("");
+const password = ref("");
+const loading = ref(false);
+const error = ref("");
+
+const router = useRouter();
+
+const submitRegister = async () => {
+  error.value = "";
+
+  const trimmedName = name.value.trim();
+  if (!trimmedName || trimmedName.length < 3 || trimmedName.length > 30) {
+    error.value = "Name must be between 3 and 30 characters.";
+    return;
+  }
+
+  const trimmedEmail = email.value.trim();
+  if (!trimmedEmail || trimmedEmail.length > 254) {
+    error.value = "Please enter a valid email address.";
+    return;
+  }
+
+  if (password.value.length < 8 || password.value.length > 72) {
+    error.value = "Password must be between 8 and 72 characters.";
+    return;
+  }
+
+  loading.value = true;
+
+  try {
+    await register(name.value.trim(), email.value.trim(), password.value);
+
+    await router.replace("/");
+  } catch (err) {
+    if (err instanceof ApiError && err.status === 409) {
+      error.value = "An account with this email already exists.";
+    } else {
+      error.value = "Could not create your account. Please try again.";
+    }
+  } finally {
+    loading.value = false;
+  }
+};
+</script>
+
+<template>
+  <Navbar />
+  <main
+    class="min-h-screen grid place-items-center p-4 bg-background text-background"
+  >
+    <section
+      class="w-full max-w-[420px] box-border p-5 border border-[#303030] rounded-[18px] bg-surface"
+    >
+      <RouterLink to="/" class="text-brand text-2xl font-extrabold no-underline"
+        >Unwrap</RouterLink
+      >
+
+      <h1 class="mt-7 mb-2 font-bold text-2xl">Create your account</h1>
+      <p class="text-[#aaa] leading-[1.6]">Start understanding your music.</p>
+
+      <form @submit.prevent="submitRegister" class="grid gap-3 mt-7">
+        <label for="name" class="text-sm">Name</label>
+        <input
+          id="name"
+          v-model.trim="name"
+          autocomplete="name"
+          placeholder="Your name"
+          minlength="3"
+          maxlength="30"
+          required
+          class="box-border w-full p-[13px] border border-[#444] rounded-lg bg-[#101010] text-white"
+        />
+
+        <label for="email" class="text-sm">Email</label>
+        <input
+          id="email"
+          v-model.trim="email"
+          type="email"
+          autocomplete="email"
+          placeholder="you@example.com"
+          maxlength="254"
+          required
+          class="box-border w-full p-[13px] border border-[#444] rounded-lg bg-[#101010] text-white"
+        />
+
+        <label for="password" class="text-sm">Password</label>
+        <input
+          id="password"
+          v-model="password"
+          type="password"
+          autocomplete="new-password"
+          minlength="8"
+          maxlength="72"
+          placeholder="At least 8 characters"
+          required
+          class="box-border w-full p-[13px] border border-[#444] rounded-lg bg-[#101010] text-white"
+        />
+
+        <p v-if="error" class="text-error" role="alert">
+          {{ error }}
+        </p>
+
+        <button
+          type="submit"
+          :disabled="loading"
+          class="mt-[10px] p-[13px] border-0 rounded-lg bg-brand text-[#111] font-bold cursor-pointer disabled:opacity-60 disabled:cursor-wait"
+        >
+          {{ loading ? "Creating account..." : "Create account" }}
+        </button>
+      </form>
+
+      <p class="mt-6 text-sm text-[#aaa] leading-[1.6]">
+        Already have an account?
+        <RouterLink to="/login" class="text-brand">Log in</RouterLink>
+      </p>
+    </section>
+  </main>
+</template>
