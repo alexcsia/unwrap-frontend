@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiError } from "@/services/api";
-import Navbar from "@/components/Navbar.vue";
+import Navbar from "@/components/navbar/Navbar.vue";
 import { useAuthStore } from "@/stores/auth";
 import { useQueryClient } from "@tanstack/vue-query";
 

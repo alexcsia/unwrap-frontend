@@ -19,6 +19,7 @@ import { VueDatePicker } from "@vuepic/vue-datepicker";
 import { MODES, MONTHS, years } from "@/composables/stats/useDate";
 import "@vuepic/vue-datepicker/dist/main.css";
 import { useDate } from "@/composables/stats/useDate";
+import Navbar from "@/components/navbar/Navbar.vue";
 
 const artists = ref<TopArtist[]>([]);
 const artistsLoading = ref(false);
@@ -119,6 +120,7 @@ computed(() => JSON.stringify(buildParams()));
 </script>
 
 <template>
+  <Navbar />
   <main class="flex flex-col gap-5 p-6 text-white">
     <header class="flex items-center mt-5 justify-between gap-4 flex-wrap">
       <div class="flex items-center gap-3 flex-wrap">

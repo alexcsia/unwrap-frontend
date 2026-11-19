@@ -7,7 +7,7 @@ import type { PlatformName } from "@/services/api";
 import PlatformCard from "@/components/platforms/PlatformCard.vue";
 import ConnectionCard from "@/components/platforms/ConnectionCard.vue";
 import { usePlatformCallback } from "@/composables/platforms/usePlatformCallback";
-import Navbar from "@/components/Navbar.vue";
+import Navbar from "@/components/navbar/Navbar.vue";
 
 const { get, isPending, isError } = usePlatforms();
 const { connect, disconnect } = usePlatformActions();

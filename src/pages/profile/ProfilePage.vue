@@ -4,7 +4,7 @@ import ProfileField from "@/components/profile/ProfileField.vue";
 import { useProfile } from "@/composables/profile/useProfile";
 import { useRouter } from "vue-router";
 import { toast } from "vue-sonner";
-import Navbar from "@/components/Navbar.vue";
+import Navbar from "@/components/navbar/Navbar.vue";
 import { ApiError } from "@/services/api";
 
 const router = useRouter();
