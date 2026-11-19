@@ -15,7 +15,6 @@ export function useProfile() {
     queryKey: ["profile"],
     queryFn: getProfile,
     staleTime: 5 * 60 * 1000,
-    initialData: authStore.user ?? undefined,
     gcTime: 30 * 60 * 1000,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
@@ -26,10 +25,6 @@ export function useProfile() {
     mutationFn: updateProfile,
     onSuccess: (updatedUser) => {
       queryClient.setQueryData(["profile"], updatedUser);
-
-      if (authStore.user) {
-        authStore.user = { ...authStore.user, ...updatedUser };
-      }
     },
   });
 
