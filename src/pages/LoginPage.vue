@@ -4,6 +4,9 @@ import { useRoute, useRouter } from "vue-router";
 import { ApiError } from "@/services/api";
 import Navbar from "@/components/Navbar.vue";
 import { useAuthStore } from "@/stores/auth";
+import { useQueryClient } from "@tanstack/vue-query";
+
+const queryClient = useQueryClient();
 
 const authStore = useAuthStore();
 const email = ref("");
@@ -25,12 +28,14 @@ const submitLogin = async () => {
   loading.value = true;
 
   try {
-    await authStore.login(email.value.trim(), password.value);
+    const user = await authStore.login(email.value.trim(), password.value);
     const redirect =
       typeof route.query.redirect === "string" ? route.query.redirect : "/";
 
     const safeRedirect =
       redirect.startsWith("/") && !redirect.startsWith("//") ? redirect : "/";
+
+    queryClient.setQueryData(["profile"], user);
 
     await router.replace(safeRedirect);
   } catch (err) {
