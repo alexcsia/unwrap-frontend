@@ -38,7 +38,7 @@ const confirmPassword = ref("");
 
 async function updateUsername(value: string) {
   try {
-    await updateProfile({ username: value });
+    await updateProfile({ username: value, email: email.value });
     toast.success("Username updated successfully.");
   } catch (err) {
     console.error(err);
@@ -48,7 +48,7 @@ async function updateUsername(value: string) {
 
 async function updateEmail(value: string) {
   try {
-    await updateProfile({ email: value });
+    await updateProfile({ username: username.value, email: value });
     toast.success("Email address updated successfully.");
   } catch (err) {
     console.error(err);

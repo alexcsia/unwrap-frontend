@@ -5,7 +5,7 @@ import type {
   StatsParams,
   TimeListenedResponse,
 } from "./types/statistics";
-import type { AuthResponse, UserProfile } from "./types/auth";
+import type { UserProfile } from "./types/auth";
 import { useAuthStore } from "@/stores/auth";
 import { useRouter } from "vue-router";
 const router = useRouter();
@@ -71,9 +71,7 @@ api.interceptors.response.use(
 );
 
 export const login = (email: string, password: string) =>
-  api
-    .post<AuthResponse>("/auth/login", { email, password })
-    .then((r) => r.data);
+  api.post<UserProfile>("/auth/login", { email, password }).then((r) => r.data);
 
 export const register = (
   displayName: string,
@@ -81,7 +79,7 @@ export const register = (
   password: string,
 ) =>
   api
-    .post<AuthResponse>("/register", { displayName, email, password })
+    .post<UserProfile>("/register", { displayName, email, password })
     .then((r) => r.data);
 
 export const logout = () => api.get<void>("/auth/logout").then((r) => r.data);
@@ -185,8 +183,8 @@ export const deleteExclusion = (params: exclusionsPayload) =>
     .then((r) => r.data);
 
 export interface UpdateProfilePayload {
-  username?: string;
-  email?: string;
+  username: string;
+  email: string;
 }
 
 export interface ChangePasswordPayload {
