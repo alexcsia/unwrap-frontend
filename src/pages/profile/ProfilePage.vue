@@ -4,6 +4,7 @@ import ProfileField from "@/components/profile/ProfileField.vue";
 import { useProfile } from "@/composables/profile/useProfile";
 import { useRouter } from "vue-router";
 import { toast } from "vue-sonner";
+import Navbar from "@/components/Navbar.vue";
 
 const router = useRouter();
 const {
@@ -23,7 +24,7 @@ watch(
   profile,
   (p) => {
     if (p) {
-      username.value = p.name ?? "";
+      username.value = p.username ?? "";
       email.value = p.email ?? "";
     }
   },
@@ -37,7 +38,7 @@ const confirmPassword = ref("");
 
 async function updateUsername(value: string) {
   try {
-    await updateProfile({ name: value });
+    await updateProfile({ username: value });
     toast.success("Username updated successfully.");
   } catch (err) {
     console.error(err);
@@ -101,6 +102,7 @@ async function handleDeleteAccount() {
 </script>
 
 <template>
+  <Navbar />
   <main class="min-h-screen bg-background px-6 py-12">
     <div class="mx-auto max-w-3xl">
       <div class="mb-10">
@@ -123,6 +125,7 @@ async function handleDeleteAccount() {
         <div v-else-if="profile">
           <ProfileField
             label="Username"
+            type="text"
             :value="username"
             @save="updateUsername"
           />
