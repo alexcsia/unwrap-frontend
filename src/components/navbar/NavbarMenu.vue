@@ -120,7 +120,7 @@ const signOut = async () => {
           :disabled="loading"
           @click="signOut"
         >
-          Log out {{ authStore.isAuthenticated }}
+          Log out
         </button>
       </div>
 
