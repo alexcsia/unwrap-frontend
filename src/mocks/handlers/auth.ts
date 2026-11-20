@@ -34,12 +34,11 @@ export const authHandlers = [
   }),
 
   http.get(`${API}/auth/logout`, async () => {
-    console.log("logging out");
     await delay(LATENCY);
     return new HttpResponse(null, { status: 204 });
   }),
 
-  http.post(`${API}/auth/refresh`, async () => {
+  http.get(`${API}/auth/refresh`, async () => {
     await delay(LATENCY);
     return new HttpResponse(null, { status: 204 });
   }),

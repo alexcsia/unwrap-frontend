@@ -5,6 +5,7 @@ import { statisticsHandlers } from "./statistics";
 import { searchHandlers } from "./search";
 import { exclusionHandlers } from "./exclusions";
 import { recentTracksHandlers } from "./recentTracks";
+import { uploadHandlers } from "./upload";
 
 export const handlers = [
   ...authHandlers,
@@ -14,4 +15,5 @@ export const handlers = [
   ...searchHandlers,
   ...exclusionHandlers,
   ...recentTracksHandlers,
+  ...uploadHandlers,
 ];
