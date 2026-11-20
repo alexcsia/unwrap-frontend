@@ -39,7 +39,7 @@ const { data: recentTracks } = useRecentTracks();
           />
         </div>
 
-        <div v-else class="mt-8 flex justify-center">
+        <div v-else class="mt-8 flex">
           <RouterLink
             to="/platforms"
             class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-brand text-surface font-bold transition hover:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
