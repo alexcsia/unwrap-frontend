@@ -4,7 +4,7 @@ import { ref } from "vue";
 const MAX_FILE_SIZE = 50 * 1024 * 1024;
 const SUPPORTED_PLATFORMS = ["spotify"] as const;
 
-type Platform = (typeof SUPPORTED_PLATFORMS)[number];
+export type Platform = (typeof SUPPORTED_PLATFORMS)[number];
 
 const emit = defineEmits<{
   upload: [payload: { file: File; platform: Platform }];

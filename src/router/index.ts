@@ -6,7 +6,7 @@ import DashboardPage from "@/pages/dashboard/DashboardPage.vue";
 import ListeningStats from "@/pages/statistics/ListeningStats.vue";
 import Platforms from "@/pages/platforms/Platforms.vue";
 import { useAuthStore } from "@/stores/auth";
-import FileUploadPage from "@/pages/FileUploadPage.vue";
+import FileUploadPage from "@/pages/upload/FileUploadPage.vue";
 import ProfilePage from "@/pages/profile/ProfilePage.vue";
 
 const router = createRouter({
