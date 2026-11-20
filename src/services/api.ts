@@ -7,6 +7,19 @@ import type {
 } from "./types/statistics";
 import type { UserProfile } from "./types/auth";
 import { useAuthStore } from "@/stores/auth";
+import type {
+  SearchEntityParams,
+  SearchEntityResponse,
+  CreateExclusionResponse,
+  Exclusions,
+  ExclusionsPayload,
+} from "./types/exclusions";
+import type { PlatformName, PlatformSummary } from "./types/platforms";
+import type {
+  ChangePasswordPayload,
+  UpdateProfilePayload,
+} from "./types/profile";
+import type { RecentTracks } from "./types/recent";
 
 import router from "@/router";
 
@@ -92,13 +105,6 @@ export const logout = () => api.get<void>("/auth/logout").then((r) => r.data);
 export const getProfile = () =>
   api.get<UserProfile>("/user/profile").then((r) => r.data);
 
-export type PlatformName = "spotify" | "lastfm";
-
-export interface PlatformSummary {
-  platformName: PlatformName;
-  connectedAt: string;
-}
-
 export const getPlatforms = () =>
   api
     .get<{ platforms: PlatformSummary[] }>("/platforms/")
@@ -123,79 +129,27 @@ export const getTimeListened = (params?: StatsParams) =>
     .get<TimeListenedResponse>("/api/time-listened", { params })
     .then((r) => r.data);
 
-export type SearchEntityResponse = Entity[];
-
-export type Entity = {
-  entityType: "track" | "artist";
-  name: string;
-  id: string;
-};
-
-export type SearchEntityParams = {
-  type: "track" | "artist";
-  name: string;
-  limit: number;
-  cursor: string | undefined | null;
-};
 export const searchEntity = (params: SearchEntityParams) =>
   api
     .get<{ result: SearchEntityResponse }>("/api/history/search", { params })
     .then((r) => r.data.result);
-
-export type Exclusions = {
-  artists: {
-    type: "artist";
-    artistId: string;
-    artistName: string;
-    excludedAt: Date;
-  }[];
-  tracks: {
-    type: "track";
-    trackId: string;
-    trackName: string;
-    artistName: string;
-    albumName: string;
-    excludedAt: Date;
-  }[];
-};
 
 export const fetchExclusions = () =>
   api
     .get<{ exclusions: Exclusions }>("/api/exclusions")
     .then((r) => r.data.exclusions);
 
-export type createExclusionResponse = {
-  id: string;
-  name: string;
-  excludedAt: Date;
-};
-
-export type exclusionsPayload = {
-  type: "track" | "artist";
-  targetId: string;
-};
-
-export const createExclusion = (payload: exclusionsPayload) =>
+export const createExclusion = (payload: ExclusionsPayload) =>
   api
-    .post<createExclusionResponse>("/api/exclusions", payload)
+    .post<CreateExclusionResponse>("/api/exclusions", payload)
     .then((r) => r.data);
 
-export const deleteExclusion = (params: exclusionsPayload) =>
+export const deleteExclusion = (params: ExclusionsPayload) =>
   api
     .delete<{
       message: string;
     }>(`/api/exclusions/${params.type}/${params.targetId}`)
     .then((r) => r.data);
-
-export interface UpdateProfilePayload {
-  username: string;
-  email: string;
-}
-
-export interface ChangePasswordPayload {
-  currentPassword: string;
-  newPassword: string;
-}
 
 export const updateProfile = (payload: UpdateProfilePayload) =>
   api.patch<UserProfile>("/user/profile", payload).then((r) => r.data);
@@ -207,12 +161,6 @@ export const changePassword = (payload: ChangePasswordPayload) =>
 
 export const deleteAccount = () =>
   api.delete<{ message: string }>("/user/account").then((r) => r.data);
-
-export interface RecentTracks {
-  trackName: string;
-  artistsNames: string[];
-  playedAt: Date;
-}
 
 export const getRecentTracks = () =>
   api.get<RecentTracks[]>("/api/recent").then((r) => r.data);
