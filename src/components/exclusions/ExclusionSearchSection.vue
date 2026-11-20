@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import {
+  ApiError,
   searchEntity,
   type Exclusions,
   type Entity,
@@ -65,7 +66,12 @@ const handleSearch = async () => {
 
     console.log("curosr now:", lastFetched.value?.id);
   } catch (err) {
-    toast.error("Search failed, please try again.");
+    console.error(err);
+    if (err instanceof ApiError) {
+      toast.error(err.message);
+    } else {
+      toast.error("Search failed, please try again.");
+    }
   }
 };
 </script>
