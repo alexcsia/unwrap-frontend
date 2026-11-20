@@ -1,4 +1,4 @@
-import type { Exclusions, PlatformSummary } from "@/services/api";
+import type { Exclusions, PlatformSummary, RecentTracks } from "@/services/api";
 import type { UserProfile } from "@/services/types/auth";
 
 export interface MockDb {
@@ -6,6 +6,7 @@ export interface MockDb {
   password: string;
   platforms: PlatformSummary[];
   exclusions: Exclusions;
+  recentTracks: RecentTracks[];
 }
 
 const STORAGE_KEY = "__mock_db_v1__";
@@ -15,6 +16,7 @@ const defaults = (): MockDb => ({
   password: "password123",
   platforms: [],
   exclusions: { artists: [], tracks: [] },
+  recentTracks: [],
 });
 
 function load(): MockDb {

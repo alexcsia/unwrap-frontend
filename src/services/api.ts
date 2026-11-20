@@ -207,3 +207,12 @@ export const changePassword = (payload: ChangePasswordPayload) =>
 
 export const deleteAccount = () =>
   api.delete<{ message: string }>("/user/account").then((r) => r.data);
+
+export interface RecentTracks {
+  trackName: string;
+  artistsNames: string[];
+  playedAt: Date;
+}
+
+export const getRecentTracks = () =>
+  api.get<RecentTracks[]>("/api/recent").then((r) => r.data);

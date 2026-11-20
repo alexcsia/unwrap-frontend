@@ -8,6 +8,34 @@ export const SEARCH_TRACKS = [
   { entityType: "track", id: "track_2", name: "Windowlicker" },
 ];
 
+export const RECENT_TRACKS = [
+  {
+    trackName: "Cruel Summer",
+    artistsNames: ["Taylor Swift"],
+    playedAt: new Date("2026-11-19T21:14:00Z"),
+  },
+  {
+    trackName: "La Tortura (feat. Alejandro Sanz)",
+    artistsNames: ["Shakira", "Alejandro Sanz"],
+    playedAt: new Date("2026-11-19T21:09:00Z"),
+  },
+  {
+    trackName: "Can't Remember to Forget You (feat. Rihanna)",
+    artistsNames: ["Shakira", "Rihanna"],
+    playedAt: new Date("2026-11-19T21:05:00Z"),
+  },
+  {
+    trackName: "Meet Me Halfway",
+    artistsNames: ["Black Eyed Peas"],
+    playedAt: new Date("2026-11-19T20:59:00Z"),
+  },
+  {
+    trackName: "Don't Stop the Music",
+    artistsNames: ["Rihanna"],
+    playedAt: new Date("2026-11-19T20:55:00Z"),
+  },
+];
+
 export function generateTopArtists() {
   return [
     {
