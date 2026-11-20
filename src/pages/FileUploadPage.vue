@@ -12,11 +12,12 @@ const uploadHistory = async ({
   const formData = new FormData();
 
   formData.append("file", file);
-
-  await axios.post(`/api/history/${platform}`, formData);
 };
 </script>
 
 <template>
-  <FileUploader @upload="uploadHistory" />
+  <Navbar />
+  <div class="w-full min-h-screen flex items-center justify-center">
+    <FileUploader @upload="uploadHistory" />
+  </div>
 </template>

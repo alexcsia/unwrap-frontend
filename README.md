@@ -1,6 +1,7 @@
-# Unwrap — Frontend
+# unwrap-frontend
 
-SPA for exploring your listening history across Spotify and Last.fm. Unwrap unifies the same recording across both providers and provides ranked statistics such as top tracks, top artists and total listening time, including user made exclusions of tracks or artists.
+Single-page application built with **Vue 3**, **TypeScript**, and **Vite**.
+Unwrap is a music analytics platform that connects to Spotify and Lastfm, unifies a user's listening history across both providers by resolving the same recording under different track identifiers, and surfaces ranked stats for top tracks, artists, and total listening time with user-controlled entity exclusions.
 
 ---
 
