@@ -1,3 +1,12 @@
+<script setup lang="ts">
+import { usePlatforms } from "@/composables/platforms/usePlatforms";
+import RecentTracksCard from "./RecentTracksCard.vue";
+import { useRecentTracks } from "@/composables/dashboard/useRecentTracks.ts";
+
+const { hasPlatform, isPending, isError } = usePlatforms();
+const { data: recentTracks } = useRecentTracks();
+</script>
+
 <template>
   <main class="max-w-6xl mx-auto px-6 py-16 md:py-24">
     <section
@@ -14,15 +23,32 @@
           your music activity. Explore your favorite artists, tracks and
           listening habits in one place.
         </p>
-
-        <RouterLink
-          to="/platforms"
-          class="inline-flex items-center gap-2 mt-8 px-6 py-3 rounded-lg bg-brand text-surface font-bold transition hover:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
-        >
-          Get started
-          <span aria-hidden="true">→</span>
-        </RouterLink>
       </div>
+
+      <template v-if="!isPending && !isError">
+        <div
+          v-if="hasPlatform"
+          class="mt-8 flex flex-col items-center justify-center gap-2.5"
+        >
+          <RecentTracksCard
+            v-for="track in recentTracks ?? []"
+            :key="`${track.playedAt}-${track.trackName}`"
+            :artists-names="track.artistsNames"
+            :track-name="track.trackName"
+            :played-at="track.playedAt"
+          />
+        </div>
+
+        <div v-else class="mt-8 flex justify-center">
+          <RouterLink
+            to="/platforms"
+            class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-brand text-surface font-bold transition hover:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
+          >
+            Get started
+            <span aria-hidden="true">→</span>
+          </RouterLink>
+        </div>
+      </template>
     </section>
 
     <section class="mt-16">
