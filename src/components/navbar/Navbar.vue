@@ -14,7 +14,25 @@ import NavbarMenu from "./NavbarMenu.vue";
         Unwrap
       </RouterLink>
 
-      <NavbarMenu />
+      <div class="flex items-center gap-3">
+        <RouterLink
+          to="/statistics"
+          active-class="border-brand text-brand"
+          class="rounded-lg border border-solid px-3.5 py-1.5 text-base font-medium tracking-tight text-gray-200 transition-colors hover:text-brand"
+        >
+          My statistics
+        </RouterLink>
+
+        <RouterLink
+          to="/exclusions"
+          active-class="border-brand text-brand"
+          class="rounded-lg border border-solid px-3.5 py-1.5 text-base font-medium tracking-tight text-gray-200 transition-colors hover:text-brand"
+        >
+          Exclusions
+        </RouterLink>
+
+        <NavbarMenu />
+      </div>
     </nav>
   </header>
 </template>
