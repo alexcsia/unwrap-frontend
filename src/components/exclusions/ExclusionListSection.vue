@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Exclusions } from "@/services/api";
+import type { Exclusions } from "@/services/types/exclusions";
 
 defineProps<{
   exclusions: Exclusions;

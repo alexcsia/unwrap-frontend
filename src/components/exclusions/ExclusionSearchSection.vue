@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import {
-  ApiError,
-  searchEntity,
   type Exclusions,
   type Entity,
   type SearchEntityResponse,
-} from "@/services/api";
+} from "@/services/types";
+import { ApiError } from "@/services/api";
+import { searchEntity } from "@/services/exclusions";
+
 import { toast } from "vue-sonner";
 
 const props = defineProps<{

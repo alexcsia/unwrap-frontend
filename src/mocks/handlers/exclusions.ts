@@ -56,11 +56,11 @@ export const exclusionHandlers = [
     const { type, targetId } = params;
     if (type === "artist") {
       db.exclusions.artists = db.exclusions.artists.filter(
-        (a) => a.artistId !== targetId,
+        (a: any) => a.artistId !== targetId,
       );
     } else {
       db.exclusions.tracks = db.exclusions.tracks.filter(
-        (t) => t.trackId !== targetId,
+        (t: any) => t.trackId !== targetId,
       );
     }
     return HttpResponse.json({ message: "Exclusion removed" });

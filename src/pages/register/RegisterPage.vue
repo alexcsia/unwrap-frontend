@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { register, ApiError } from "@/services/api";
+import { register } from "@/services/auth";
+import { ApiError } from "@/services/api";
 import Navbar from "@/components/navbar/Navbar.vue";
 
 const name = ref("");

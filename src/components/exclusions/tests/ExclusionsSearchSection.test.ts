@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { mount } from "@vue/test-utils";
 
 import ExclusionSearchSection from "../ExclusionSearchSection.vue";
-import { searchEntity } from "@/services/api";
+import { searchEntity } from "@/services/exclusions.ts";
 import { toast } from "vue-sonner";
 
 vi.mock("@/services/api", () => ({

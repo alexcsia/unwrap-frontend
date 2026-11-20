@@ -1,7 +1,8 @@
 import { onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { ApiError, type PlatformName } from "@/services/api";
+import { ApiError } from "@/services/api";
 import { useQueryClient } from "@tanstack/vue-query";
+import type { PlatformName } from "@/services/types";
 import { toast } from "vue-sonner";
 
 const VALID_PLATFORMS: PlatformName[] = ["spotify", "lastfm"];

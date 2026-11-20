@@ -3,7 +3,7 @@ import {
   usePlatforms,
   usePlatformActions,
 } from "@/composables/platforms/usePlatforms";
-import type { PlatformName } from "@/services/api";
+import type { PlatformName } from "@/services/types";
 import PlatformCard from "@/components/platforms/PlatformCard.vue";
 import ConnectionCard from "@/components/platforms/ConnectionCard.vue";
 import { usePlatformCallback } from "@/composables/platforms/usePlatformCallback";

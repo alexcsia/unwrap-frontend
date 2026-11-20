@@ -2,9 +2,9 @@ import {
   createExclusion,
   fetchExclusions,
   deleteExclusion,
-  ApiError,
-  type Exclusions,
-} from "@/services/api";
+} from "@/services/exclusions";
+import type { Exclusions } from "@/services/types";
+import { ApiError } from "@/services/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
 import { computed } from "vue";
 import { toast } from "vue-sonner";

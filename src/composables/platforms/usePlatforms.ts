@@ -4,9 +4,9 @@ import {
   getPlatforms,
   connectPlatform,
   disconnectPlatform,
-  ApiError,
-  type PlatformName,
-} from "@/services/api";
+} from "@/services/platforms";
+import type { PlatformName } from "@/services/types";
+import { ApiError } from "@/services/api";
 import { toast } from "vue-sonner";
 
 const KEY = ["platforms"];

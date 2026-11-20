@@ -1,5 +1,5 @@
 import { http, HttpResponse, delay } from "msw";
-import type { PlatformName } from "@/services/api";
+import type { PlatformName } from "@/services/types";
 import { db, persist } from "../db";
 
 const API = import.meta.env.VITE_API_URL;

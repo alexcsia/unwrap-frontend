@@ -4,12 +4,12 @@ import StatCard from "@/components/statistics/StatCard.vue";
 import RankedTable, {
   type RankedColumn,
 } from "@/components/statistics/RankedTable.vue";
+import { ApiError } from "@/services/api";
 import {
   getTopArtists,
-  getTopTracks,
   getTimeListened,
-  ApiError,
-} from "@/services/api";
+  getTopTracks,
+} from "@/services/statistics";
 import type {
   TopArtist,
   TopTrack,

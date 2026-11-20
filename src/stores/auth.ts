@@ -1,11 +1,11 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import {
-  getProfile,
   login as apiLogin,
   register as apiRegister,
   logout as apiLogout,
-} from "@/services/api";
+} from "@/services/auth";
+import { getProfile } from "@/services/profile";
 
 export const useAuthStore = defineStore("auth", () => {
   const isAuthenticated = ref(false);

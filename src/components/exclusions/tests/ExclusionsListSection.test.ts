@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import { mount } from "@vue/test-utils";
 
 import ExclusionListSection from "../ExclusionListSection.vue";
-import type { Exclusions } from "@/services/api";
+import type { Exclusions } from "@/services/types/exclusions.ts";
 
 describe("ExclusionListSection", () => {
   const exclusions: Exclusions = {

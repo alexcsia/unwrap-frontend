@@ -4,7 +4,7 @@ import {
   updateProfile,
   changePassword,
   deleteAccount,
-} from "@/services/api";
+} from "@/services/profile";
 import { useAuthStore } from "@/stores/auth";
 
 export function useProfile() {

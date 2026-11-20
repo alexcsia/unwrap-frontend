@@ -1,6 +1,6 @@
 import { computed } from "vue";
 import { useQuery } from "@tanstack/vue-query";
-import { getRecentTracks } from "@/services/api";
+import { getRecentTracks } from "@/services/statistics";
 
 const KEY = ["recentTracks"];
 
