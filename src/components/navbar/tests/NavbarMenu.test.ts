@@ -102,7 +102,7 @@ describe("NavbarMenu", () => {
 
     expect(wrapper.text()).toContain("Profile");
     expect(wrapper.text()).toContain("Platforms");
-    expect(wrapper.text()).toContain("Log out true");
+    expect(wrapper.text()).toContain("Log out");
     expect(wrapper.text()).not.toContain("Login");
   });
 
