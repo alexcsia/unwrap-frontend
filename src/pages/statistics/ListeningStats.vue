@@ -1,29 +1,20 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { computed } from "vue";
 import StatCard from "@/components/statistics/StatCard.vue";
 import RankedTable, {
   type RankedColumn,
 } from "@/components/statistics/RankedTable.vue";
-import { ApiError } from "@/services/api";
-import {
-  getTopArtists,
-  getTimeListened,
-  getTopTracks,
-} from "@/services/statistics";
-import type {
-  TopArtist,
-  TopTrack,
-  TimeListenedResponse,
-} from "@/services/types/statistics";
+import type { TopArtist, TopTrack } from "@/services/types/statistics";
 import { VueDatePicker } from "@vuepic/vue-datepicker";
 import { MODES, MONTHS, years } from "@/composables/stats/useDate";
 import "@vuepic/vue-datepicker/dist/main.css";
 import { useDate } from "@/composables/stats/useDate";
 import Navbar from "@/components/navbar/Navbar.vue";
-
-const artists = ref<TopArtist[]>([]);
-const artistsLoading = ref(false);
-const artistsError = ref<string | null>(null);
+import {
+  useArtistsStats,
+  useTimeListenedStats,
+  useTracksStats,
+} from "@/composables/stats/useStats";
 
 const {
   selectedDay,
@@ -36,19 +27,28 @@ const {
   buildParams,
 } = useDate();
 
-async function loadArtists() {
-  artistsLoading.value = true;
-  artistsError.value = null;
-  try {
-    const res = await getTopArtists(buildParams());
-    artists.value = res.topArtists;
-  } catch (e) {
-    artistsError.value =
-      e instanceof ApiError ? e.message : "Could not load top artists.";
-  } finally {
-    artistsLoading.value = false;
-  }
-}
+const params = computed(() => buildParams());
+
+const {
+  topArtists,
+  isLoading: artistsLoading,
+  error: artistsError,
+  refetch: loadArtists,
+} = useArtistsStats(params);
+
+const {
+  topTracks,
+  isLoading: tracksLoading,
+  error: tracksError,
+  refetch: loadTracks,
+} = useTracksStats(params);
+
+const {
+  timeListened,
+  isLoading: timeLoading,
+  error: timeError,
+  refetch: loadTimeListened,
+} = useTimeListenedStats(params);
 
 const artistColumns: RankedColumn[] = [
   { key: "rank", label: "#" },
@@ -60,25 +60,6 @@ const artistColumns: RankedColumn[] = [
     format: (r: TopArtist) => formatDuration(r.durationMs),
   },
 ];
-
-const tracks = ref<TopTrack[]>([]);
-const tracksLoading = ref(false);
-const tracksError = ref<string | null>(null);
-
-async function loadTracks() {
-  tracksLoading.value = true;
-  tracksError.value = null;
-  try {
-    const res = await getTopTracks(buildParams());
-    tracks.value = res.topTracks;
-  } catch (e) {
-    console.error(e);
-    tracksError.value =
-      e instanceof ApiError ? e.message : "Could not load top tracks.";
-  } finally {
-    tracksLoading.value = false;
-  }
-}
 
 const trackColumns: RankedColumn[] = [
   { key: "rank", label: "#" },
@@ -93,30 +74,11 @@ const trackColumns: RankedColumn[] = [
   },
 ];
 
-const time = ref<TimeListenedResponse | null>(null);
-const timeLoading = ref(false);
-const timeError = ref<string | null>(null);
-
-async function loadTimeListened() {
-  timeLoading.value = true;
-  timeError.value = null;
-  try {
-    time.value = await getTimeListened(buildParams());
-  } catch (e) {
-    timeError.value =
-      e instanceof ApiError ? e.message : "Could not load listening time.";
-  } finally {
-    timeLoading.value = false;
-  }
-}
-
 function loadAll() {
   loadArtists();
   loadTracks();
   loadTimeListened();
 }
-
-computed(() => JSON.stringify(buildParams()));
 </script>
 
 <template>
@@ -205,7 +167,7 @@ computed(() => JSON.stringify(buildParams()));
           type="button"
           class="px-3.5 py-2 border border-neutral-700 rounded-lg bg-surface text-white cursor-pointer hover:bg-[#303030] disabled:opacity-50 disabled:cursor-default"
           :disabled="timeLoading"
-          @click="loadTimeListened"
+          @click="() => loadTimeListened"
         >
           {{ timeLoading ? "Loading…" : "Load" }}
         </button>
@@ -218,17 +180,19 @@ computed(() => JSON.stringify(buildParams()));
       <div class="grid gap-3 grid-cols-[repeat(auto-fit,minmax(180px,1fr))]">
         <StatCard
           label="Total listening time"
-          :value="time ? formatDuration(time.statistics.totalMs) : '-'"
+          :value="
+            timeListened ? formatDuration(timeListened.statistics.totalMs) : '-'
+          "
         />
         <StatCard
           label="Tracks played"
-          :value="time ? time.statistics.totalTracks : '-'"
+          :value="timeListened ? timeListened.statistics.totalTracks : '-'"
         />
         <StatCard
           label="Period"
           :value="
-            time
-              ? `${fmtDate(time.period.start)} – ${fmtDate(time.period.end)}`
+            timeListened
+              ? `${fmtDate(timeListened.period.start)} – ${fmtDate(timeListened.period.end)}`
               : '-'
           "
         />
@@ -238,9 +202,9 @@ computed(() => JSON.stringify(buildParams()));
     <RankedTable
       title="Top artists"
       :columns="artistColumns"
-      :rows="artists"
+      :rows="topArtists"
       :loading="artistsLoading"
-      :error="artistsError"
+      :error="artistsError?.message ?? null"
       empty-message="Load top artists to see results."
     >
       <template #actions>
@@ -248,7 +212,7 @@ computed(() => JSON.stringify(buildParams()));
           type="button"
           class="px-3.5 py-2 border border-neutral-700 rounded-lg bg-surface text-white cursor-pointer hover:bg-[#303030] disabled:opacity-50 disabled:cursor-default"
           :disabled="artistsLoading"
-          @click="loadArtists"
+          @click="() => loadArtists"
         >
           {{ artistsLoading ? "Loading…" : "Load" }}
         </button>
@@ -258,9 +222,9 @@ computed(() => JSON.stringify(buildParams()));
     <RankedTable
       title="Top tracks"
       :columns="trackColumns"
-      :rows="tracks"
+      :rows="topTracks"
       :loading="tracksLoading"
-      :error="tracksError"
+      :error="tracksError?.message ?? null"
       empty-message="Load top tracks to see results."
     >
       <template #actions>
@@ -268,7 +232,7 @@ computed(() => JSON.stringify(buildParams()));
           type="button"
           class="px-3.5 py-2 border border-neutral-700 rounded-lg bg-surface text-white cursor-pointer hover:bg-[#303030] disabled:opacity-50 disabled:cursor-default"
           :disabled="tracksLoading"
-          @click="loadTracks"
+          @click="() => loadTracks"
         >
           {{ tracksLoading ? "Loading…" : "Load" }}
         </button>
