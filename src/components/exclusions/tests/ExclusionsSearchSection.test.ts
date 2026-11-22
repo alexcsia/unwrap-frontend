@@ -5,7 +5,7 @@ import ExclusionSearchSection from "../ExclusionSearchSection.vue";
 import { searchEntity } from "@/services/exclusions.ts";
 import { toast } from "vue-sonner";
 
-vi.mock("@/services/api", () => ({
+vi.mock("@/services/exclusions.ts", () => ({
   searchEntity: vi.fn(),
 }));
 
