@@ -16,7 +16,7 @@ vi.mock("@/composables/exclusions/useExclusions", () => ({
   useExclusionsActions: vi.fn(),
 }));
 
-vi.mock("@/services/api", () => ({
+vi.mock("@/services/exclusions.ts", () => ({
   searchEntity: vi.fn(),
 }));
 
