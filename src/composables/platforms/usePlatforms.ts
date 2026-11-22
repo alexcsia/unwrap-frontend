@@ -15,10 +15,10 @@ export function usePlatforms() {
   const query = useQuery({
     queryKey: KEY,
     queryFn: getPlatforms,
-    staleTime: 60_000,
+    staleTime: Infinity,
   });
 
-  const platforms = computed(() => query.data.value ?? []) as any;
+  const platforms = computed(() => query.data.value ?? []);
   const hasPlatform = computed(() => platforms.value.length > 0);
   const get = (name: PlatformName) =>
     platforms.value.find((p: any) => p.platformName === name);

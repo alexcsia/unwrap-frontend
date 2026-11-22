@@ -14,7 +14,7 @@ export function useExclusions() {
   const query = useQuery({
     queryKey: KEY,
     queryFn: fetchExclusions,
-    staleTime: 60_000,
+    staleTime: 1000 * 60 * 5,
   });
 
   const exclusions = computed(() => {

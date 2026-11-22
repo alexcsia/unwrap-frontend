@@ -8,10 +8,10 @@ export function useRecentTracks() {
   const query = useQuery({
     queryKey: KEY,
     queryFn: getRecentTracks,
-    staleTime: 60_000 * 30,
+    staleTime: 5 * 60 * 1000,
   });
 
-  const recentTracks = computed(() => query.data.value ?? []) as any;
+  const recentTracks = computed(() => query.data.value ?? []);
 
   return { ...query, recentTracks };
 }
