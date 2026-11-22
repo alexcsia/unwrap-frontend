@@ -43,20 +43,9 @@ export const authHandlers = [
     return new HttpResponse(null, { status: 204 });
   }),
 
-  http.post(`${API}/auth/change-password`, async ({ request }) => {
-    await delay(LATENCY);
-    const { currentPassword, newPassword } = (await request.json()) as {
-      currentPassword: string;
-      newPassword: string;
-    };
-    if (currentPassword !== db.password) {
-      return HttpResponse.json(
-        { message: "Current password is incorrect" },
-        { status: 400 },
-      );
-    }
-    db.password = newPassword;
-    return HttpResponse.json({ message: "Password updated" });
+  http.post(`${API}/auth/change-password`, async () => {
+    await delay(80);
+    return HttpResponse.json({ message: "Password changed successfully" });
   }),
 
   http.get(`${API}/auth/connect/:platform`, async ({ params }) => {
