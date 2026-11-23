@@ -1,12 +1,14 @@
-export const SEARCH_ARTISTS = [
-  { entityType: "artist", id: "artist_1", name: "Radiohead" },
-  { entityType: "artist", id: "artist_2", name: "Aphex Twin" },
-];
+export const SEARCH_ARTISTS = Array.from({ length: 20 }, (_, i) => ({
+  id: `artist-search-${i + 1}`,
+  name: `artist ${i + 1}`,
+  entityType: "artist" as const,
+}));
 
-export const SEARCH_TRACKS = [
-  { entityType: "track", id: "track_1", name: "Everything In Its Right Place" },
-  { entityType: "track", id: "track_2", name: "Windowlicker" },
-];
+export const SEARCH_TRACKS = Array.from({ length: 20 }, (_, i) => ({
+  id: `track-search-${i + 1}`,
+  name: `track ${i + 1}`,
+  entityType: "track" as const,
+}));
 
 export const RECENT_TRACKS = [
   {
