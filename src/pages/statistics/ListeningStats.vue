@@ -181,12 +181,16 @@ function loadAll() {
         <StatCard
           label="Total listening time"
           :value="
-            timeListened ? formatDuration(timeListened.statistics.totalMs) : '-'
+            timeListened?.statistics
+              ? formatDuration(timeListened?.statistics.totalMs)
+              : '-'
           "
         />
         <StatCard
           label="Tracks played"
-          :value="timeListened ? timeListened.statistics.totalTracks : '-'"
+          :value="
+            timeListened?.statistics ? timeListened.statistics.totalTracks : '-'
+          "
         />
         <StatCard
           label="Period"
