@@ -167,7 +167,7 @@ function loadAll() {
           type="button"
           class="px-3.5 py-2 border border-neutral-700 rounded-lg bg-surface text-white cursor-pointer hover:bg-[#303030] disabled:opacity-50 disabled:cursor-default"
           :disabled="timeLoading"
-          @click="() => loadTimeListened"
+          @click="() => loadTimeListened()"
         >
           {{ timeLoading ? "Loading…" : "Load" }}
         </button>
