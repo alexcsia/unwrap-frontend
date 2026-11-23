@@ -7,7 +7,6 @@ import {
 } from "@/services/types";
 import { ApiError } from "@/services/api";
 import { searchEntity } from "@/services/exclusions";
-
 import { toast } from "vue-sonner";
 
 const props = defineProps<{
@@ -15,10 +14,15 @@ const props = defineProps<{
   exclusions: Exclusions;
 }>();
 
+const PAGE_SIZE = 10;
+
 const entities = ref<SearchEntityResponse | null>(null);
 const lastFetched = ref<Entity | null>(null);
 const typeToExclude = ref<"track" | "artist" | null>(null);
 const entityName = ref<string | null>(null);
+const loading = ref(false);
+const loadingMore = ref(false);
+const hasMore = ref(false);
 
 const entityTypes: { label: "track" | "artist" }[] = [
   { label: "track" },
@@ -29,9 +33,25 @@ const handleAdd = (id: string, type: "track" | "artist") => {
   props.onAdd(id, type);
 };
 
-const setType = (type: "track" | "artist") => {
-  typeToExclude.value = type;
+const resetResults = () => {
+  entities.value = null;
+  lastFetched.value = null;
+  hasMore.value = false;
 };
+
+const setType = (type: "track" | "artist") => {
+  if (typeToExclude.value === type) return;
+  typeToExclude.value = type;
+  resetResults();
+};
+
+const fetchPage = (cursor: string | null) =>
+  searchEntity({
+    type: typeToExclude.value!,
+    name: entityName.value!,
+    limit: PAGE_SIZE,
+    cursor,
+  });
 
 const handleSearch = async () => {
   if (!typeToExclude.value) {
@@ -45,34 +65,42 @@ const handleSearch = async () => {
     return;
   }
 
-  //initially cursor = null
-  //but when scrolling/on button press, should load more with the
-  //cursor set to entityId of last rendered entity
-
-  //add pagination to know if it should return more/ how many more are left upon loading more
-
-  console.log("cursor", lastFetched.value?.id);
+  loading.value = true;
   try {
-    entities.value = await searchEntity({
-      type: typeToExclude.value,
-      name: entityName.value,
-      limit: 10,
-      cursor: lastFetched.value?.id ?? null,
-    });
-
-    lastFetched.value =
-      entities.value && entities.value.length > 0
-        ? entities.value[entities.value.length - 1]
-        : null;
-
-    console.log("curosr now:", lastFetched.value?.id);
+    const page = await fetchPage(null);
+    entities.value = page;
+    lastFetched.value = page.length > 0 ? page[page.length - 1] : null;
+    hasMore.value = page.length === PAGE_SIZE;
   } catch (err) {
     console.error(err);
-    if (err instanceof ApiError) {
-      toast.error(err.message);
-    } else {
-      toast.error("Search failed, please try again.");
+    toast.error(
+      err instanceof ApiError
+        ? err.message
+        : "Search failed, please try again.",
+    );
+  } finally {
+    loading.value = false;
+  }
+};
+
+const handleLoadMore = async () => {
+  if (!lastFetched.value || loadingMore.value) return;
+
+  loadingMore.value = true;
+  try {
+    const page = await fetchPage(lastFetched.value.id);
+    if (page.length > 0) {
+      entities.value = [...(entities.value ?? []), ...page];
+      lastFetched.value = page[page.length - 1];
     }
+    hasMore.value = page.length === PAGE_SIZE;
+  } catch (err) {
+    console.error(err);
+    toast.error(
+      err instanceof ApiError ? err.message : "Could not load more results.",
+    );
+  } finally {
+    loadingMore.value = false;
   }
 };
 </script>
@@ -119,10 +147,11 @@ const handleSearch = async () => {
         @keyup.enter="handleSearch"
       />
       <button
-        class="bg-[#a8e66b] text-surface font-bold px-6 py-3 rounded-lg hover:opacity-90 transition-opacity"
+        :disabled="loading"
+        class="bg-[#a8e66b] text-surface font-bold px-6 py-3 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
         @click="handleSearch"
       >
-        Search
+        {{ loading ? "Searching…" : "Search" }}
       </button>
     </div>
 
@@ -161,6 +190,23 @@ const handleSearch = async () => {
           </button>
         </li>
       </ul>
+
+      <button
+        v-if="hasMore"
+        type="button"
+        :disabled="loadingMore"
+        class="mt-3 w-full px-4 py-2.5 border border-[#303030] rounded-lg bg-surface text-[#a8e66b] text-sm font-semibold hover:border-[#a8e66b] transition-colors disabled:opacity-50 disabled:cursor-wait"
+        @click="handleLoadMore"
+      >
+        {{ loadingMore ? "Loading…" : "Load more" }}
+      </button>
     </div>
+
+    <p
+      v-else-if="entities && entities.length === 0"
+      class="text-sm text-neutral-500 text-center py-4"
+    >
+      No results found.
+    </p>
   </section>
 </template>
