@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { mount } from "@vue/test-utils";
+import { mount, flushPromises } from "@vue/test-utils";
+import { VueQueryPlugin, QueryClient } from "@tanstack/vue-query";
 
 import ExclusionSearchSection from "../ExclusionSearchSection.vue";
 import { searchEntity } from "@/services/exclusions.ts";
@@ -16,6 +17,26 @@ vi.mock("vue-sonner", () => ({
   },
 }));
 
+const mountWithQuery = (
+  component: typeof ExclusionSearchSection,
+  options = {},
+) => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+      },
+    },
+  });
+
+  return mount(component, {
+    ...options,
+    global: {
+      plugins: [[VueQueryPlugin, { queryClient }]],
+    },
+  });
+};
+
 const searchEntityMock = vi.mocked(searchEntity);
 
 describe("ExclusionSearchSection", () => {
@@ -27,7 +48,7 @@ describe("ExclusionSearchSection", () => {
   });
 
   it("renders the search controls", () => {
-    const wrapper = mount(ExclusionSearchSection, {
+    const wrapper = mountWithQuery(ExclusionSearchSection, {
       props: {
         onAdd,
         exclusions: defaultExclusions,
@@ -41,7 +62,7 @@ describe("ExclusionSearchSection", () => {
   });
 
   it("shows an error if no entity type is selected", async () => {
-    const wrapper = mount(ExclusionSearchSection, {
+    const wrapper = mountWithQuery(ExclusionSearchSection, {
       props: {
         onAdd,
         exclusions: defaultExclusions,
@@ -64,7 +85,7 @@ describe("ExclusionSearchSection", () => {
   });
 
   it("shows an error if the search input is empty", async () => {
-    const wrapper = mount(ExclusionSearchSection, {
+    const wrapper = mountWithQuery(ExclusionSearchSection, {
       props: {
         onAdd,
         exclusions: defaultExclusions,
@@ -76,7 +97,6 @@ describe("ExclusionSearchSection", () => {
       .find((button) => button.text() === "ARTIST");
 
     await artistButton!.trigger("click");
-
     await wrapper.get("input").setValue("   ");
 
     const searchButton = wrapper
@@ -99,7 +119,7 @@ describe("ExclusionSearchSection", () => {
       },
     ]);
 
-    const wrapper = mount(ExclusionSearchSection, {
+    const wrapper = mountWithQuery(ExclusionSearchSection, {
       props: {
         onAdd,
         exclusions: defaultExclusions,
@@ -110,13 +130,15 @@ describe("ExclusionSearchSection", () => {
       .findAll("button")
       .find((button) => button.text() === "ARTIST");
 
+    await artistButton!.trigger("click");
+    await wrapper.get("input").setValue("Artist");
+
     const searchButton = wrapper
       .findAll("button")
       .find((button) => button.text() === "Search");
 
-    await artistButton!.trigger("click");
-    await wrapper.get("input").setValue("Artist");
     await searchButton!.trigger("click");
+    await flushPromises();
 
     expect(searchEntityMock).toHaveBeenCalledWith({
       type: "artist",
@@ -138,7 +160,7 @@ describe("ExclusionSearchSection", () => {
       },
     ]);
 
-    const wrapper = mount(ExclusionSearchSection, {
+    const wrapper = mountWithQuery(ExclusionSearchSection, {
       props: {
         onAdd,
         exclusions: defaultExclusions,
@@ -150,7 +172,6 @@ describe("ExclusionSearchSection", () => {
       .find((button) => button.text() === "ARTIST");
 
     await artistButton!.trigger("click");
-
     await wrapper.get("input").setValue("Artist");
 
     const searchButton = wrapper
@@ -158,6 +179,7 @@ describe("ExclusionSearchSection", () => {
       .find((button) => button.text() === "Search");
 
     await searchButton!.trigger("click");
+    await flushPromises();
 
     const excludeButton = wrapper
       .findAll("button")
@@ -166,6 +188,7 @@ describe("ExclusionSearchSection", () => {
     expect(excludeButton).toBeDefined();
 
     await excludeButton!.trigger("click");
+    await flushPromises();
 
     expect(onAdd).toHaveBeenCalledWith("artist-1", "artist");
   });

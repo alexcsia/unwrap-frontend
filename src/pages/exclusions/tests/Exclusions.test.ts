@@ -1,7 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { mount } from "@vue/test-utils";
+import { mount, flushPromises } from "@vue/test-utils";
 import { ref } from "vue";
-
+import { createPinia } from "pinia";
+import { VueQueryPlugin, QueryClient } from "@tanstack/vue-query";
 import ExclusionsPage from "../ExclusionsPage.vue";
 
 import {
@@ -23,6 +24,32 @@ vi.mock("@/services/exclusions.ts", () => ({
 const useExclusionsMock = vi.mocked(useExclusions);
 const useExclusionsActionsMock = vi.mocked(useExclusionsActions);
 const searchEntityMock = vi.mocked(searchEntity);
+
+const mountWithQuery = (component: typeof ExclusionsPage, options = {}) => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+      },
+      mutations: {
+        retry: false,
+      },
+    },
+  });
+
+  return mount(component, {
+    ...options,
+    global: {
+      plugins: [createPinia(), [VueQueryPlugin, { queryClient }]],
+      stubs: {
+        Navbar: true,
+        RouterLink: {
+          template: "<a><slot /></a>",
+        },
+      },
+    },
+  });
+};
 
 describe("Exclusions page", () => {
   const addMutateAsync = vi.fn().mockResolvedValue(undefined);
@@ -52,6 +79,9 @@ describe("Exclusions page", () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
+    addMutateAsync.mockResolvedValue(undefined);
+    removeMutateAsync.mockResolvedValue(undefined);
+
     useExclusionsMock.mockReturnValue({
       exclusions: ref(exclusions),
       isPending: ref(false),
@@ -68,13 +98,7 @@ describe("Exclusions page", () => {
   });
 
   function mountPage() {
-    return mount(ExclusionsPage, {
-      global: {
-        stubs: {
-          Navbar: true,
-        },
-      },
-    });
+    return mountWithQuery(ExclusionsPage);
   }
 
   it("renders the search and exclusion sections", () => {
@@ -82,7 +106,6 @@ describe("Exclusions page", () => {
 
     expect(wrapper.text()).toContain("Manage Exclusions");
     expect(wrapper.text()).toContain("Your Current Exclusions");
-
     expect(wrapper.text()).toContain("Example Artist");
     expect(wrapper.text()).toContain("Example Track");
   });
@@ -119,12 +142,18 @@ describe("Exclusions page", () => {
     const searchButton = wrapper
       .findAll("button")
       .find((button) => button.text() === "Search");
+
     await searchButton!.trigger("click");
+    await flushPromises();
+
     const excludeButton = wrapper
       .findAll("button")
       .find((button) => button.text() === "Exclude");
 
+    expect(excludeButton).toBeDefined();
+
     await excludeButton!.trigger("click");
+    await flushPromises();
 
     expect(addMutateAsync).toHaveBeenCalledWith({
       targetId: "artist-2",
@@ -142,6 +171,7 @@ describe("Exclusions page", () => {
     expect(deleteButton).toBeDefined();
 
     await deleteButton!.trigger("click");
+    await flushPromises();
 
     expect(removeMutateAsync).toHaveBeenCalledWith({
       targetId: "artist-1",
@@ -156,7 +186,10 @@ describe("Exclusions page", () => {
       .findAll("button")
       .filter((button) => button.text() === "Delete");
 
+    expect(deleteButtons).toHaveLength(2);
+
     await deleteButtons[1].trigger("click");
+    await flushPromises();
 
     expect(removeMutateAsync).toHaveBeenCalledWith({
       targetId: "track-1",
