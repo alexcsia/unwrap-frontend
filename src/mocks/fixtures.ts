@@ -45,14 +45,35 @@ export function generateTopArtists() {
       artistId: "artist_1",
       artistName: "Radiohead",
       playCount: 100,
-      durationMs: 100000,
+      durationMs: 10023000,
     },
     {
       rank: 2,
       artistId: "artist_2",
       artistName: "Aphex Twin",
       playCount: 50,
-      durationMs: 200000,
+      durationMs: 2060000,
+    },
+    {
+      rank: 3,
+      artistId: "artist_3",
+      artistName: "Boards of Canada",
+      playCount: 42,
+      durationMs: 1685000,
+    },
+    {
+      rank: 4,
+      artistId: "artist_4",
+      artistName: "Björk",
+      playCount: 38,
+      durationMs: 1522000,
+    },
+    {
+      rank: 5,
+      artistId: "artist_5",
+      artistName: "Massive Attack",
+      playCount: 31,
+      durationMs: 1244000,
     },
   ];
 }
@@ -66,7 +87,7 @@ export function generateTopTracks() {
       artistNames: "Radiohead",
       albumName: "Kid A",
       plays: 100,
-      durationMs: 1000,
+      durationMs: 152000,
     },
     {
       rank: 2,
@@ -75,10 +96,38 @@ export function generateTopTracks() {
       artistNames: "Aphex Twin",
       albumName: "Windowlicker",
       plays: 50,
-      durationMs: 500,
+      durationMs: 505800,
+    },
+    {
+      rank: 3,
+      trackId: "track_3",
+      trackName: "Idioteque",
+      artistNames: "Radiohead",
+      albumName: "Kid A",
+      plays: 45,
+      durationMs: 933300,
+    },
+    {
+      rank: 4,
+      trackId: "track_4",
+      trackName: "Xtal",
+      artistNames: "Aphex Twin",
+      albumName: "Selected Ambient Works 85-92",
+      plays: 40,
+      durationMs: 826100,
+    },
+    {
+      rank: 5,
+      trackId: "track_5",
+      trackName: "Paranoid Android",
+      artistNames: "Radiohead",
+      albumName: "OK Computer",
+      plays: 35,
+      durationMs: 702130,
     },
   ];
 }
+
 export function paginate(items: any[], limit: number, offset: number) {
   return {
     pagination: {
